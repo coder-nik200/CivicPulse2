@@ -68,7 +68,16 @@ const issueSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["REPORTED", "AI_ANALYZED", "VERIFIED", "ASSIGNED", "IN_PROGRESS", "RESOLVED", "RESOLUTION_VERIFIED", "CLOSED"],
+    enum: [
+      "REPORTED",
+      "AI_ANALYZED",
+      "VERIFIED",
+      "ASSIGNED",
+      "IN_PROGRESS",
+      "RESOLVED",
+      "RESOLUTION_VERIFIED",
+      "CLOSED",
+    ],
     default: "REPORTED",
   },
   reportedBy: {
@@ -93,10 +102,12 @@ const issueSchema = new mongoose.Schema({
     default: 0,
     min: 0,
   },
-  followers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  }],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,

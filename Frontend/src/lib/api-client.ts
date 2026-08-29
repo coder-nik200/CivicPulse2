@@ -1,28 +1,29 @@
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  "http://localhost:5001/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
 
-async function request(
+async function request<T>(
   endpoint: string,
-  options: RequestInit = {}
-) {
-  const response = await fetch(
-    `${API_URL}${endpoint}`,
-    {
-      ...options,
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        ...(options.headers || {}),
-      },
-    }
-  );
+  options: RequestInit = {},
+): Promise<T> {
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    ...options,
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+  });
 
-  const data = await response.json();
+  let data: any = null;
+
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
 
   if (!response.ok) {
     throw new Error(
-      data.message || "Something went wrong"
+      data?.message || `Request failed with status ${response.status}`,
     );
   }
 
@@ -35,26 +36,38 @@ export const authApi = {
     email: string;
     password: string;
     phone?: string;
+    role: "citizen" | "authority" | "admin";
   }) =>
-    request("/auth/signup", {
+    request<{
+      success: boolean;
+      message: string;
+      user: any;
+    }>("/auth/signup", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
-  login: (data: {
-    email: string;
-    password: string;
-  }) =>
-    request("/auth/login", {
+  login: (data: { email: string; password: string }) =>
+    request<{
+      success: boolean;
+      message: string;
+      user: any;
+    }>("/auth/login", {
       method: "POST",
       body: JSON.stringify(data),
-    }),
-
-  logout: () =>
-    request("/auth/logout", {
-      method: "POST",
     }),
 
   me: () =>
-    request("/auth/me"),
+    request<{
+      success: boolean;
+      user: any;
+    }>("/auth/me"),
+
+  logout: () =>
+    request<{
+      success: boolean;
+      message: string;
+    }>("/auth/logout", {
+      method: "POST",
+    }),
 };

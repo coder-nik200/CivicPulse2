@@ -12,14 +12,27 @@ const cookieOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
+/* =========================================================
+   SIGNUP
+========================================================= */
+
 export async function signup(req, res) {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone, role } = req.body;
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !role) {
       return res.status(400).json({
         success: false,
-        message: "Name, email and password are required",
+        message: "Name, email, password and role are required",
+      });
+    }
+
+    const allowedRoles = ["citizen", "authority"];
+
+    if (!allowedRoles.includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid account type. Choose citizen or authority.",
       });
     }
 
@@ -31,26 +44,40 @@ export async function signup(req, res) {
     }
 
     const user = await signupUser({
-      name,
-      email,
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
       password,
-      phone,
+      phone: phone?.trim(),
+      role,
     });
 
-    const { token } = await loginUser(email, password);
+    const { token } = await loginUser(
+      email.trim().toLowerCase(),
+      password
+    );
 
-    res.cookie("civicplus_token", token, cookieOptions).status(201).json({
-      success: true,
-      message: "Account created successfully",
-      user,
-    });
+    res
+      .cookie("civicplus_token", token, cookieOptions)
+      .status(201)
+      .json({
+        success: true,
+        message: "Account created successfully",
+        user,
+      });
   } catch (error) {
+    console.error("Signup error:", error);
+
     res.status(400).json({
       success: false,
-      message: error.message,
+      message:
+        error instanceof Error ? error.message : "Signup failed",
     });
   }
 }
+
+/* =========================================================
+   LOGIN
+========================================================= */
 
 export async function login(req, res) {
   try {
@@ -63,7 +90,10 @@ export async function login(req, res) {
       });
     }
 
-    const { token, user } = await loginUser(email, password);
+    const { token, user } = await loginUser(
+      email.trim().toLowerCase(),
+      password,
+    );
 
     res.cookie("civicplus_token", token, cookieOptions).json({
       success: true,
@@ -71,12 +101,18 @@ export async function login(req, res) {
       user,
     });
   } catch (error) {
+    console.error("Login error:", error);
+
     res.status(401).json({
       success: false,
-      message: error.message,
+      message: error instanceof Error ? error.message : "Login failed",
     });
   }
 }
+
+/* =========================================================
+   LOGOUT
+========================================================= */
 
 export async function logout(req, res) {
   res.clearCookie("civicplus_token", {
@@ -85,15 +121,19 @@ export async function logout(req, res) {
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
 
-  res.json({
+  return res.json({
     success: true,
     message: "Logged out successfully",
   });
 }
 
+/* =========================================================
+   CURRENT USER
+========================================================= */
+
 export async function getCurrentUser(req, res) {
   try {
-    const token = req.cookies.civicplus_token;
+    const token = req.cookies?.civicplus_token;
 
     if (!token) {
       return res.status(401).json({
@@ -103,6 +143,13 @@ export async function getCurrentUser(req, res) {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (typeof decoded !== "object" || !decoded.userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid authentication token",
+      });
+    }
 
     const user = await users().findOne({
       _id: new ObjectId(decoded.userId),
@@ -115,7 +162,7 @@ export async function getCurrentUser(req, res) {
       });
     }
 
-    res.json({
+    return res.json({
       success: true,
       user: {
         id: user._id.toString(),
@@ -126,8 +173,10 @@ export async function getCurrentUser(req, res) {
         avatar: user.avatar,
       },
     });
-  } catch {
-    res.status(401).json({
+  } catch (error) {
+    console.error("Get current user error:", error);
+
+    return res.status(401).json({
       success: false,
       message: "Invalid or expired session",
     });
