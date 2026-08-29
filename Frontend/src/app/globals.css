@@ -1768,3 +1768,8 @@ select:focus-visible {
   height: 100%;
   font-family: var(--font-sans);
 }
+
+.rem-4 {
+  width: 4.5rem;
+  height: 4.5rem;
+}

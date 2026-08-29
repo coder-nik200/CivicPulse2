@@ -23,6 +23,7 @@ import type { CivicIssue, IssueCategory, IssueStatus } from "@/types/issue";
 
 import { label } from "@/lib/issue";
 import { useAuth } from "@/context/AuthContext";
+import Image from "next/image";
 
 /* =========================================================
    CATEGORY ICON
@@ -150,9 +151,9 @@ export function Navbar({ dark = false }: { dark?: boolean }) {
           onClick={closeMenu}
           className="group flex shrink-0 items-center gap-2.5"
         >
-          <span className="grid h-20 w-20 place-items-center rounded-lg bg-civic text-white">
+          <span className="rem-4 grid place-items-center rounded-lg bg-white text-white">
             {/* <MapPin size={17} /> */}
-            <Image src="/Logo.png" alt="Civic Fix" width={500} height={350} />
+            <Image src="/Logo.png" alt="Civic Fix" width={400} height={300} />
           </span>
           {/* CivicPulse */}
         </Link>
