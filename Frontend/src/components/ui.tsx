@@ -472,26 +472,46 @@ export function SeverityBadge({ severity }: { severity: number }) {
 //   );
 // }
 
-
-
-export function Navbar() {
+export function Navbar({ dark = false }: { dark?: boolean }) {
   const [open, setOpen] = useState(false);
+
+  const { user, logout } = useAuth();
+
+  const closeMenu = () => {
+    setOpen(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      closeMenu();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  const isAdmin = user?.role === "admin" || user?.role === "authority";
+
+  const navText = dark
+    ? "text-slate-300 hover:bg-white/10 hover:text-white"
+    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900";
 
   return (
     <header className="bg-[#F5F7F6] py-5 px-4">
       <div className="w-100">
-      {/* <div className="mx-auto max-w-7xl"> */}
+        {/* <div className="mx-auto max-w-7xl"> */}
         <div className="flex items-center justify-between rounded-[28px] border border-gray-200 bg-white px-6 py-5 shadow-[0_12px_35px_rgba(15,23,42,0.08)]">
-
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
             <div className="relative h-12 w-12">
               {/* <AsyncImage query="CivicFix green logo icon transparent" aspectRatio="1:1" maxWidth={48} maxHeight={48}/> */}
-              <Image src="/logo.png"
-  alt="CivicFix Logo"
-  width={48}
-  height={48}
-  className="h-12 w-12 object-contain"/>
+              <Image
+                src="/logo.png"
+                alt="CivicFix Logo"
+                width={48}
+                height={48}
+                className="h-12 w-12 object-contain"
+              />
             </div>
 
             <div className="leading-tight">
@@ -508,10 +528,9 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-10">
-
             <Link
               href="/"
-              className="flex items-center gap-2 rounded-2xl bg-[#EEF8F4] px-6 py-4 text-[#0F4C46] font-semibold shadow-sm"
+             className={`flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold transition ${navText}`}
             >
               <Home size={18} fill="currentColor" />
               Home
@@ -519,7 +538,7 @@ export function Navbar() {
 
             <Link
               href="/map"
-              className="flex items-center gap-2 text-gray-700 hover:text-[#0F4C46] transition"
+              className={`flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold transition ${navText}`}
             >
               <Map size={18} />
               Civic Map
@@ -527,19 +546,38 @@ export function Navbar() {
 
             <Link
               href="/report"
-              className="flex items-center gap-2 text-gray-700 hover:text-[#0F4C46] transition"
+               className={`flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold transition ${navText}`}
             >
               <FileText size={18} />
               Report Issue
             </Link>
+
+            {user && (
+              <Link
+                href="/dashboard"
+                className={`flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold transition ${navText}`}
+              >
+                <LayoutDashboard size={15} />
+                Dashboard
+              </Link>
+            )}
+
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className={`flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold transition ${navText}`}
+              >
+                <ShieldCheck size={15} />
+                Admin
+              </Link>
+            )}
           </div>
 
           {/* Desktop Buttons */}
           <div className="hidden lg:flex items-center gap-6">
-
             <div className="h-10 w-px bg-gray-200" />
 
-            <Link
+            {/* <Link
               href="/login"
               className="flex items-center gap-2 rounded-xl border border-[#B7DDD2] px-6 py-3 text-gray-700 transition hover:bg-[#F4FBF8]"
             >
@@ -552,12 +590,84 @@ export function Navbar() {
               className="group flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#0F4C46] to-[#0A3D38] px-7 py-3 font-semibold text-white shadow-lg shadow-[#0F4C46]/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
             >
               Sign Up
-
               <ArrowRight
                 size={18}
                 className="transition group-hover:translate-x-1"
               />
-            </Link>
+            </Link> */}
+
+            {!user ? (
+              <>
+                <Link
+                  href="/login"
+                  className={`flex items-center gap-2 rounded-lg px-3.5 py-2.5 text-sm font-bold transition ${
+                    dark
+                      ? "text-slate-200 hover:bg-white/10"
+                      : "text-slate-700 hover:bg-slate-100"
+                  }`}
+                >
+                  <LogIn size={16} />
+                  Login
+                </Link>
+
+                <Link
+                  href="/signup"
+                  className="flex items-center gap-2 rounded-lg bg-[#123d34] px-4 py-2.5 text-sm font-bold text-white shadow-md shadow-emerald-900/10 transition hover:-translate-y-0.5 hover:bg-[#0d3029] hover:shadow-lg"
+                >
+                  Sign Up
+                  <ArrowRight size={15} />
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/report"
+                  className="flex items-center gap-2 rounded-lg bg-[#123d34] px-4 py-2.5 text-xs font-extrabold text-white shadow-md shadow-emerald-900/10 transition hover:-translate-y-0.5 hover:bg-[#0d3029] hover:shadow-lg"
+                >
+                  <PlusCircle size={16} />
+                  Report Issue
+                </Link>
+
+                <Link
+                  href="/dashboard"
+                  className={`ml-1 flex items-center gap-2 rounded-xl px-2 py-1.5 transition ${
+                    dark ? "hover:bg-white/10" : "hover:bg-slate-100"
+                  }`}
+                >
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-sm font-extrabold text-white shadow-sm">
+                    {user.name?.charAt(0).toUpperCase() || "U"}
+                  </span>
+
+                  <div className="hidden max-w-[120px] text-left lg:block">
+                    <p className="truncate text-xs font-extrabold">
+                      {user.name}
+                    </p>
+
+                    <p
+                      className={`truncate text-[10px] ${
+                        dark ? "text-slate-400" : "text-slate-500"
+                      }`}
+                    >
+                      {user.role || "Citizen"}
+                    </p>
+                  </div>
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  title="Logout"
+                  aria-label="Logout"
+                  className={`grid h-9 w-9 place-items-center rounded-lg transition ${
+                    dark
+                      ? "text-slate-400 hover:bg-red-500/10 hover:text-red-400"
+                      : "text-slate-500 hover:bg-red-50 hover:text-red-600"
+                  }`}
+                >
+                  <LogOut size={17} />
+                </button>
+              </>
+            )}
           </div>
 
           {/* Mobile Toggle */}
@@ -572,9 +682,7 @@ export function Navbar() {
         {/* Mobile Menu */}
         {open && (
           <div className="mt-4 rounded-3xl border border-gray-200 bg-white p-5 shadow-lg lg:hidden">
-
             <nav className="space-y-2">
-
               <Link
                 href="/"
                 className="flex items-center gap-3 rounded-xl bg-[#EEF8F4] px-4 py-3 font-medium text-[#0F4C46]"
@@ -626,8 +734,6 @@ export function Navbar() {
   );
 }
 
-
-
 /* =========================================================
    ISSUE CARD
 ========================================================= */
@@ -640,10 +746,7 @@ export function IssueCard({
   compact?: boolean;
 }) {
   return (
-     <Link
-      href={`/issues/${issue.id}`}
-      className="group block"
-    >
+    <Link href={`/issues/${issue.id}`} className="group block">
       <div className="rounded-2xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg">
         <div className="flex gap-3">
           {/* Image */}
@@ -668,10 +771,7 @@ export function IssueCard({
 
             {/* Location */}
             <div className="mt-2 flex items-start gap-1.5">
-              <MapPin
-                size={13}
-                className="mt-0.5 shrink-0 text-slate-400"
-              />
+              <MapPin size={13} className="mt-0.5 shrink-0 text-slate-400" />
 
               <p className="line-clamp-2 text-xs text-slate-500">
                 {issue.address}
