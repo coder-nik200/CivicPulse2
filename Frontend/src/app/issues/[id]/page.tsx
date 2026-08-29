@@ -12,9 +12,11 @@ import {
   CircleDot,
 } from "lucide-react";
 
+import dynamic from "next/dynamic";
 import { issueStore } from "@/lib/issue-store";
 import { MapCanvas, Navbar, SeverityBadge, StatusBadge } from "@/components/ui";
 import { label } from "@/lib/issue";
+import IssueLocationMapWrapper from "@/components/issues/issue-location-map-wrapper";
 
 export default async function IssuePage({
   params,
@@ -40,6 +42,14 @@ export default async function IssuePage({
     ["Resolution Verified", "", ""],
     ["Closed", "", ""],
   ];
+
+  // const IssueLocationMap = dynamic(
+  //   () => import("@/components/issues/issueLocationMap"),
+  //   {
+  //     ssr: false,
+  //     loading: () => <div className="map-loading">Loading interactive map…</div>
+  //   },
+  // );
 
   const current = Math.max(
     0,
@@ -372,9 +382,14 @@ export default async function IssuePage({
                 </div>
               </div>
 
-              <div className="h-64 overflow-hidden sm:h-72">
+              {/* <div className="h-64 overflow-hidden sm:h-72">
                 <MapCanvas issues={[issue]} selected={issue} />
+              </div> */}
+
+              <div className="h-64 overflow-hidden rounded-b-2xl sm:h-72">
+                <IssueLocationMapWrapper lat={issue.lat} lng={issue.lng} />
               </div>
+
             </section>
 
             {/* COMMUNITY */}

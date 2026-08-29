@@ -11,6 +11,7 @@ const CivicMap = dynamic(() => import("@/components/civic-map"), {
   ssr: false,
   loading: () => <div className="map-loading">Loading interactive map…</div>,
 });
+
 type Bounds = {
   minLat: number;
   maxLat: number;
@@ -91,6 +92,7 @@ export default function MapPage() {
       ),
     [issues, category, priority],
   );
+
   const chooseIssue = (issue: CivicIssue) => {
     setSelected(issue);
     setTarget({ lat: issue.lat, lng: issue.lng, zoom: 16 });
@@ -147,6 +149,7 @@ export default function MapPage() {
           + Report issue
         </Link>
       </header>
+
       <div className="map-workspace">
         <aside className={`map-sidebar ${filtersOpen ? "open" : ""}`}>
           <div className="sidebar-heading">
@@ -217,6 +220,7 @@ export default function MapPage() {
             ))}
           </div>
         </aside>
+
         <section className="map-stage">
           <button
             className="mobile-filter"
@@ -228,13 +232,17 @@ export default function MapPage() {
             <span className="live-dot" />
             Live civic map <b>{visible.length} markers</b>
           </div>
-          <CivicMap
-            issues={visible}
-            selectedId={selected?.id}
-            onSelect={chooseIssue}
-            onBoundsChange={setBounds}
-            target={target}
-          />
+
+          <div className="map-frame">
+            <CivicMap
+              issues={visible}
+              selectedId={selected?.id}
+              onSelect={chooseIssue}
+              onBoundsChange={setBounds}
+              target={target}
+            />
+          </div>
+
           {selected && (
             <div className="selected-sheet">
               <button
