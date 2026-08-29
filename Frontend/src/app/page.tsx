@@ -14,8 +14,12 @@ import {
 } from "lucide-react";
 
 import { demoIssues } from "@/data/demoIssues";
-
-import { IssueCard, MapCanvas, Navbar, SeverityBadge } from "@/components/ui";
+import {
+  IssueCard,
+  MapCanvas,
+  Navbar,
+  SeverityBadge,
+} from "@/components/ui";
 import { label } from "@/lib/issue";
 
 const metrics = [
@@ -90,7 +94,6 @@ export default function Home() {
       ========================================================= */}
 
       <section className="relative border-b border-slate-200/80">
-        {/* Background decoration */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute -left-32 top-20 h-72 w-72 rounded-full bg-emerald-200/20 blur-3xl" />
           <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-teal-100/30 blur-3xl" />
@@ -98,7 +101,8 @@ export default function Home() {
         </div>
 
         <div className="relative mx-auto grid max-w-[1240px] gap-12 px-5 py-12 sm:px-6 sm:py-16 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:gap-16 lg:px-8 lg:py-24">
-          {/* Hero copy */}
+          {/* HERO CONTENT */}
+
           <div className="max-w-2xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[10px] font-black tracking-[0.16em] text-emerald-700">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
@@ -108,24 +112,25 @@ export default function Home() {
             <h1 className="max-w-[680px] text-[2.9rem] font-black leading-[0.98] tracking-[-0.06em] text-[#10201c] sm:text-6xl lg:text-[4.5rem]">
               Report problems.
               <br />
+
               <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
                 Drive action.
               </span>
             </h1>
 
             <p className="mt-6 max-w-xl text-sm leading-7 text-slate-600 sm:text-base">
-              Turn everyday civic problems into evidence-backed action. Report
-              an issue, understand its severity, track its progress, and verify
-              the resolution.
+              Turn everyday civic problems into evidence-backed action.
+              Report an issue, understand its severity, track its progress,
+              and verify the resolution.
             </p>
 
-            {/* CTA */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/report"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-[#123d34] px-5 py-3.5 text-sm font-black text-white shadow-lg shadow-emerald-900/10 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#0d3029] hover:shadow-xl"
               >
                 Report an issue
+
                 <ArrowRight
                   size={16}
                   className="transition-transform group-hover:translate-x-1"
@@ -140,16 +145,19 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Trust indicator */}
             <div className="mt-9 flex items-start gap-3">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-100">
-                <ShieldCheck size={18} className="text-emerald-600" />
+                <ShieldCheck
+                  size={18}
+                  className="text-emerald-600"
+                />
               </div>
 
               <div>
                 <p className="text-xs font-black text-slate-800">
                   Evidence-led reporting
                 </p>
+
                 <p className="mt-0.5 text-[11px] text-slate-500">
                   Human-verified outcomes
                 </p>
@@ -157,19 +165,25 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Hero map */}
+          {/* HERO MAP */}
+
           <div className="relative">
             <div className="absolute -inset-3 rounded-[28px] bg-gradient-to-br from-emerald-200/30 to-teal-100/20 blur-2xl" />
 
             <div className="relative overflow-hidden rounded-2xl border border-white/80 bg-white p-2 shadow-[0_25px_80px_-30px_rgba(15,23,42,0.35)] sm:rounded-3xl sm:p-3">
               <div className="relative h-[390px] overflow-hidden rounded-xl sm:h-[500px] sm:rounded-2xl">
-                <MapCanvas issues={demoIssues.slice(0, 7)} selected={lead} />
+                <MapCanvas
+                  issues={demoIssues.slice(0, 7)}
+                  selected={lead}
+                />
 
-                {/* Map overlay */}
-                <div className="absolute left-4 top-4 right-4 flex items-start justify-between gap-3">
+                {/* MAP TOP OVERLAY */}
+
+                <div className="absolute left-4 right-4 top-4 flex items-start justify-between gap-3">
                   <div className="rounded-xl border border-white/70 bg-white/95 px-3.5 py-3 shadow-lg backdrop-blur">
                     <div className="flex items-center gap-2">
                       <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+
                       <span className="text-[10px] font-black tracking-wider text-slate-500">
                         LIVE SIGNAL
                       </span>
@@ -181,17 +195,22 @@ export default function Home() {
                   </div>
 
                   <div className="hidden rounded-xl border border-white/70 bg-white/95 p-3 shadow-lg backdrop-blur sm:block">
-                    <MapPin size={17} className="text-emerald-600" />
+                    <MapPin
+                      size={17}
+                      className="text-emerald-600"
+                    />
                   </div>
                 </div>
 
-                {/* Bottom map card */}
+                {/* MAP BOTTOM CARD */}
+
                 <div className="absolute bottom-4 left-4 right-4">
                   <div className="flex items-center justify-between gap-3 rounded-xl border border-white/70 bg-[#10201c]/95 p-3.5 text-white shadow-xl backdrop-blur">
                     <div className="min-w-0">
                       <p className="truncate text-xs font-black">
                         {label(lead.category)}
                       </p>
+
                       <p className="mt-1 flex items-center gap-1 text-[10px] text-slate-300">
                         <MapPin size={11} />
                         Civic issue detected
@@ -218,6 +237,7 @@ export default function Home() {
               <p className="text-[10px] font-black tracking-[0.18em] text-emerald-600">
                 LIVE CITY STATUS
               </p>
+
               <p className="mt-1 text-xs text-slate-500">
                 Real-time civic activity overview
               </p>
@@ -254,7 +274,10 @@ export default function Home() {
                     </div>
 
                     <div className="hidden rounded-lg bg-slate-100 p-2 sm:block">
-                      <Icon size={15} className="text-emerald-600" />
+                      <Icon
+                        size={15}
+                        className="text-emerald-600"
+                      />
                     </div>
                   </div>
                 </div>
@@ -290,6 +313,7 @@ export default function Home() {
             className="group inline-flex w-fit items-center gap-2 text-sm font-black text-emerald-700"
           >
             Open full map
+
             <ArrowRight
               size={15}
               className="transition-transform group-hover:translate-x-1"
@@ -300,7 +324,10 @@ export default function Home() {
         <div className="mt-9 grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-sm sm:p-3">
             <div className="h-[400px] overflow-hidden rounded-xl sm:h-[520px]">
-              <MapCanvas issues={demoIssues} selected={demoIssues[1]} />
+              <MapCanvas
+                issues={demoIssues}
+                selected={demoIssues[1]}
+              />
             </div>
           </div>
 
@@ -310,6 +337,7 @@ export default function Home() {
                 <p className="text-xs font-black text-slate-900">
                   Recent reports
                 </p>
+
                 <p className="mt-1 text-[10px] text-slate-500">
                   Latest civic activity
                 </p>
@@ -321,25 +349,30 @@ export default function Home() {
             </div>
 
             {demoIssues.slice(0, 3).map((issue) => (
-              <IssueCard key={issue.id} issue={issue} compact />
+              <IssueCard
+                key={issue.id}
+                issue={issue}
+                compact
+              />
             ))}
           </div>
         </div>
       </section>
 
       {/* =========================================================
-          LIFECYCLE
+          CIVICFIX LIFECYCLE
       ========================================================= */}
 
       <section className="relative overflow-hidden bg-[#10201c] text-white">
         <div className="pointer-events-none absolute right-0 top-0 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
+
         <div className="pointer-events-none absolute bottom-0 left-0 h-72 w-72 rounded-full bg-teal-500/10 blur-3xl" />
 
         <div className="relative mx-auto max-w-[1240px] px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-[10px] font-black tracking-[0.16em] text-emerald-300">
               <Sparkles size={12} />
-              THE CivicFix LIFECYCLE
+              THE CIVICFIX LIFECYCLE
             </div>
 
             <h2 className="mt-5 text-3xl font-black tracking-[-0.045em] sm:text-4xl">
@@ -347,8 +380,8 @@ export default function Home() {
             </h2>
 
             <p className="mt-4 text-sm leading-7 text-slate-400">
-              CivicFix creates a transparent chain of evidence from the moment a
-              problem is reported until the repair is verified.
+              CivicFix creates a transparent chain of evidence from the
+              moment a problem is reported until the repair is verified.
             </p>
           </div>
 
@@ -372,7 +405,9 @@ export default function Home() {
                     />
                   </div>
 
-                  <h3 className="mt-8 text-lg font-black">{item.title}</h3>
+                  <h3 className="mt-8 text-lg font-black">
+                    {item.title}
+                  </h3>
 
                   <p className="mt-2 text-xs text-slate-400">
                     {item.description}
@@ -397,7 +432,6 @@ export default function Home() {
 
       <section className="mx-auto max-w-[1240px] px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
-          {/* Text */}
           <div>
             <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-[10px] font-black tracking-[0.16em] text-slate-600">
               <ShieldCheck size={12} />
@@ -409,39 +443,67 @@ export default function Home() {
             </h2>
 
             <p className="mt-5 max-w-md text-sm leading-7 text-slate-600">
-              Every report combines photographic evidence, GPS location, citizen
-              reports, AI analysis, and issue history. AI helps teams see the
-              signal, not replace human judgment.
+              Every report combines photographic evidence, GPS location,
+              citizen reports, AI analysis, and issue history. AI helps
+              teams see the signal, not replace human judgment.
             </p>
 
             <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2">
               <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <ScanSearch size={18} className="text-emerald-600" />
-                <p className="mt-3 text-xs font-black">AI analysis</p>
+                <ScanSearch
+                  size={18}
+                  className="text-emerald-600"
+                />
+
+                <p className="mt-3 text-xs font-black">
+                  AI analysis
+                </p>
+
                 <p className="mt-1 text-[10px] text-slate-500">
                   Evidence classification
                 </p>
               </div>
 
               <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <MapPin size={18} className="text-emerald-600" />
-                <p className="mt-3 text-xs font-black">GPS verified</p>
+                <MapPin
+                  size={18}
+                  className="text-emerald-600"
+                />
+
+                <p className="mt-3 text-xs font-black">
+                  GPS verified
+                </p>
+
                 <p className="mt-1 text-[10px] text-slate-500">
                   Precise issue location
                 </p>
               </div>
 
               <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <Users size={18} className="text-emerald-600" />
-                <p className="mt-3 text-xs font-black">Community signal</p>
+                <Users
+                  size={18}
+                  className="text-emerald-600"
+                />
+
+                <p className="mt-3 text-xs font-black">
+                  Community signal
+                </p>
+
                 <p className="mt-1 text-[10px] text-slate-500">
                   Citizen confirmations
                 </p>
               </div>
 
               <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <Clock3 size={18} className="text-emerald-600" />
-                <p className="mt-3 text-xs font-black">Issue history</p>
+                <Clock3
+                  size={18}
+                  className="text-emerald-600"
+                />
+
+                <p className="mt-3 text-xs font-black">
+                  Issue history
+                </p>
+
                 <p className="mt-1 text-[10px] text-slate-500">
                   Track progress over time
                 </p>
@@ -449,7 +511,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* AI analysis card */}
+          {/* AI CARD */}
+
           <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_25px_70px_-35px_rgba(15,23,42,0.4)] sm:p-5">
             <div className="overflow-hidden rounded-xl bg-slate-100">
               <img
@@ -463,14 +526,18 @@ export default function Home() {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Sparkles size={14} className="text-emerald-500" />
+                    <Sparkles
+                      size={14}
+                      className="text-emerald-500"
+                    />
+
                     <p className="text-[10px] font-black tracking-[0.15em] text-emerald-600">
                       AI-GENERATED ANALYSIS
                     </p>
                   </div>
 
                   <h3 className="mt-2 text-2xl font-black text-slate-900">
-                    Pothole
+                    {label(lead.category)}
                   </h3>
                 </div>
 
@@ -483,7 +550,10 @@ export default function Home() {
 
               <div className="mt-6 grid grid-cols-3 divide-x divide-slate-200 border-t border-slate-100 pt-5">
                 <div className="px-2 first:pl-0">
-                  <b className="block text-lg font-black text-slate-900">96%</b>
+                  <b className="block text-lg font-black text-slate-900">
+                    {lead.confidence}%
+                  </b>
+
                   <span className="text-[10px] text-slate-500">
                     AI confidence
                   </span>
@@ -491,14 +561,22 @@ export default function Home() {
 
                 <div className="px-3">
                   <b className="block text-lg font-black text-slate-900">
-                    8.7 / 10
+                    {lead.severity.toFixed(1)} / 10
                   </b>
-                  <span className="text-[10px] text-slate-500">Severity</span>
+
+                  <span className="text-[10px] text-slate-500">
+                    Severity
+                  </span>
                 </div>
 
                 <div className="px-3">
-                  <b className="block text-lg font-black text-slate-900">92</b>
-                  <span className="text-[10px] text-slate-500">Priority</span>
+                  <b className="block text-lg font-black text-slate-900">
+                    {lead.priority}
+                  </b>
+
+                  <span className="text-[10px] text-slate-500">
+                    Priority
+                  </span>
                 </div>
               </div>
             </div>
@@ -513,18 +591,24 @@ export default function Home() {
       <section className="border-t border-slate-200 bg-white">
         <div className="mx-auto max-w-[900px] px-5 py-16 text-center sm:px-6 sm:py-20">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100">
-            <MapPin className="text-emerald-600" size={22} />
+            <MapPin
+              className="text-emerald-600"
+              size={22}
+            />
           </div>
 
           <h2 className="mt-5 text-3xl font-black tracking-[-0.045em] text-slate-900 sm:text-4xl">
             Your city has problems.
             <br />
-            <span className="text-emerald-600">Help make them visible.</span>
+
+            <span className="text-emerald-600">
+              Help make them visible.
+            </span>
           </h2>
 
           <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-500">
-            One report can become a verified signal, a prioritized task, and
-            eventually a real-world repair.
+            One report can become a verified signal, a prioritized task,
+            and eventually a real-world repair.
           </p>
 
           <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
@@ -533,6 +617,7 @@ export default function Home() {
               className="group inline-flex items-center justify-center gap-2 rounded-xl bg-[#123d34] px-6 py-3.5 text-sm font-black text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[#0d3029]"
             >
               Report an issue
+
               <ArrowRight
                 size={16}
                 className="transition-transform group-hover:translate-x-1"
