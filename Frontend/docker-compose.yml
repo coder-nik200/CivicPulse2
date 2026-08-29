@@ -1,0 +1,20 @@
+services:
+  database:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: civicpulse
+      POSTGRES_PASSWORD: civicpulse
+      POSTGRES_DB: civicpulse
+    ports: ["5432:5432"]
+    volumes: ["civicpulse-data:/var/lib/postgresql/data"]
+  api:
+    build: ./backend
+    command: sh -c "npx prisma migrate deploy && npm run dev"
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgresql://civicpulse:civicpulse@database:5432/civicpulse?schema=public
+      FRONTEND_URL: http://localhost:3000
+    ports: ["4000:4000"]
+    depends_on: [database]
+volumes:
+  civicpulse-data:
