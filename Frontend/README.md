@@ -1,6 +1,6 @@
-# CivicPulse
+# CivicFix
 
-CivicPulse is a civic-issue reporting demo with a responsive Next.js frontend and a working API.
+CivicFix is a civic-issue reporting demo with a responsive Next.js frontend and a working API.
 
 ## Quick start (recommended)
 
@@ -17,12 +17,12 @@ The map page uses Leaflet with OpenStreetMap tiles, real marker coordinates, mar
 
 ## API
 
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `GET` | `/api/issues` | List issues, optionally filtered by category or status |
-| `POST` | `/api/issues` | Create a civic issue from photo, location, and details |
-| `GET` | `/api/issues/:id` | Get an issue |
-| `PATCH` | `/api/issues/:id` | Update an issue status |
+| Method  | Route             | Purpose                                                |
+| ------- | ----------------- | ------------------------------------------------------ |
+| `GET`   | `/api/issues`     | List issues, optionally filtered by category or status |
+| `POST`  | `/api/issues`     | Create a civic issue from photo, location, and details |
+| `GET`   | `/api/issues/:id` | Get an issue                                           |
+| `PATCH` | `/api/issues/:id` | Update an issue status                                 |
 
 ## Optional standalone backend
 

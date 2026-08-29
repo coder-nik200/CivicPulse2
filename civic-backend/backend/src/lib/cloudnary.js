@@ -9,7 +9,7 @@ cloudinary.config({
 // Accepts a base64 data URL string directly — Cloudinary supports this natively
 export async function uploadBase64Image(base64DataUrl) {
   const result = await cloudinary.uploader.upload(base64DataUrl, {
-    folder: "civicpulse-issues",
+    folder: "CivicFix-issues",
   });
   return result.secure_url;
 }

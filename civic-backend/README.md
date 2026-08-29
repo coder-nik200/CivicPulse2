@@ -1,4 +1,4 @@
-# CivicPulse standalone backend
+# CivicFix standalone backend
 
 This optional Express server implements the same `/api/issues` contract as the built-in Next.js API.
 

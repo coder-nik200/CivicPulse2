@@ -108,7 +108,7 @@ export default function MapPage() {
           <span>
             <MapPin size={17} />
           </span>
-          CivicPulse
+          CivicFix
         </Link>
         <div className="map-search">
           <Search size={18} />

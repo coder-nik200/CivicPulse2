@@ -14,7 +14,7 @@ export async function connectDB() {
 
   await client.connect();
 
-  db = client.db("civicpulse");
+  db = client.db("CivicFix");
 
   await db.command({ ping: 1 });
 
