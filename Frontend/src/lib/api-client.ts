@@ -1,73 +1,59 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
-async function request<T>(
-  endpoint: string,
-  options: RequestInit = {},
-): Promise<T> {
-  const response = await fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    credentials: "include",
+type IssueCategory = "pothole" | "garbage" | "streetlight";
+
+interface SubmitIssueInput {
+  file: File;
+  category: IssueCategory;
+  latitude: number;
+  longitude: number;
+  address: string;
+  description?: string;
+}
+
+export async function submitIssue(
+  input: SubmitIssueInput,
+): Promise<{ issue: { id: string } }> {
+  const imageUrl = await fileToDataUrl(input.file);
+
+  return request("/issues", {
+    method: "POST",
+    body: JSON.stringify({
+      category: input.category,
+      imageUrl,
+      lat: input.latitude,
+      lng: input.longitude,
+      address: input.address,
+      description: input.description,
+    }),
+  });
+}
+
+async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...init,
     headers: {
       "Content-Type": "application/json",
-      ...(options.headers || {}),
+      ...(init.headers || {}),
     },
   });
 
-  let data: any = null;
-
-  try {
-    data = await response.json();
-  } catch {
-    data = null;
-  }
+  const payload = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(
-      data?.message || `Request failed with status ${response.status}`,
-    );
+    throw new Error(payload.error ?? "Request failed");
   }
 
-  return data;
+  return payload as T;
 }
 
-export const authApi = {
-  signup: (data: {
-    name: string;
-    email: string;
-    password: string;
-    phone?: string;
-    role: "citizen" | "authority" | "admin";
-  }) =>
-    request<{
-      success: boolean;
-      message: string;
-      user: any;
-    }>("/auth/signup", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
 
-  login: (data: { email: string; password: string }) =>
-    request<{
-      success: boolean;
-      message: string;
-      user: any;
-    }>("/auth/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = reject;
 
-  me: () =>
-    request<{
-      success: boolean;
-      user: any;
-    }>("/auth/me"),
-
-  logout: () =>
-    request<{
-      success: boolean;
-      message: string;
-    }>("/auth/logout", {
-      method: "POST",
-    }),
-};
+    reader.readAsDataURL(file);
+  });
+}
