@@ -5,7 +5,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1024",
     category: "pothole",
-    imageUrl: photo("photo-1558618666-fcd25c85cd64"),
+    imageUrl: ("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj9ofYnDyrW0QMKd-gYkcmK8xRgpuz3YmvkAaPHSxObshh8k8evPard8U&s"),
     lat: 28.6139,
     lng: 77.209,
     address: "Outer Ring Road, Sector 15",
@@ -24,7 +24,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1031",
     category: "garbage",
-    imageUrl: photo("photo-1604187351574-c75ca79f5807"),
+    imageUrl: ("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxMWnxlsmIVIlf7akFQvs0d-QHowqwpWhojOiRK5c0zA&s=10"),
     lat: 28.6202,
     lng: 77.2161,
     address: "Community Market, Sector 22",
@@ -42,7 +42,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1034",
     category: "streetlight",
-    imageUrl: photo("photo-1541963463532-d68292c34b19"),
+    imageUrl: ("https://t3.ftcdn.net/jpg/16/46/42/96/240_F_1646429641_n5SDWj6vCVQ5SQI4QZPeUw7Tpnvv0y44.jpg"),
     lat: 28.6073,
     lng: 77.222,
     address: "Park Avenue, Block C",
@@ -58,7 +58,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1018",
     category: "pothole",
-    imageUrl: photo("photo-1516961642265-531546e84af2"),
+    imageUrl: ("https://media.istockphoto.com/id/174662203/photo/pot-hole.jpg?s=612x612&w=0&k=20&c=HhFYQD5qAJItGzYWJJQ72nxBR8iidL7Np2g82dfvnoM="),
     lat: 28.6184,
     lng: 77.1984,
     address: "Station Road, Ward 5",
@@ -74,7 +74,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1013",
     category: "waterlogging",
-    imageUrl: photo("photo-1436891620584-47fd0e565afb"),
+    imageUrl: ("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQr8kkByE_HK-bE39VDC05sSriMMKh8l3zW06erDoYzQ&s=10"),
     lat: 28.6292,
     lng: 77.2077,
     address: "Metro Underpass, Sector 18",
@@ -90,7 +90,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1008",
     category: "garbage",
-    imageUrl: photo("photo-1532996122724-e3c354a0b15b"),
+    imageUrl: ("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfaNJte_F5ekmbonRm7zkw1VIf9rVhxrpsiuGxfFvEOA&s=10"),
     lat: 28.6039,
     lng: 77.2134,
     address: "Lake View Road, Ward 2",
@@ -111,7 +111,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1027",
     category: "pothole",
-    imageUrl: photo("photo-1523731407965-2430cd12f5e4"),
+    imageUrl: ("https://media.istockphoto.com/id/183362998/photo/pot-hole-on-asphalt-road.jpg?s=612x612&w=0&k=20&c=L4L39llUb0sYCB5mjNj7ZtPFsv8p9wdu12zpQlQKiOE="),
     lat: 28.611,
     lng: 77.2292,
     address: "Canal Road, Sector 9",
@@ -126,7 +126,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1021",
     category: "streetlight",
-    imageUrl: photo("photo-1509048191080-d2f661c2d14a"),
+    imageUrl: ("https://t3.ftcdn.net/jpg/04/41/54/76/240_F_441547616_R2xVcAUPEiEoyWjosaUNDpoPLLxCwixu.jpg"),
     lat: 28.6253,
     lng: 77.2229,
     address: "Civic Centre Lane",
@@ -141,7 +141,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1011",
     category: "obstruction",
-    imageUrl: photo("photo-1519501025264-65ba15a82390"),
+    imageUrl: ("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD0qvfVVlQkUzlADEyLVD4WFKa2OpJEJJUj-eyH25L0w&s=10"),
     lat: 28.6009,
     lng: 77.2051,
     address: "School Crossing, Ward 3",
@@ -156,7 +156,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1006",
     category: "pothole",
-    imageUrl: photo("photo-1458245201256-03b7b95da85f"),
+    imageUrl: ("https://media.istockphoto.com/id/157743690/photo/dangerous-pot-hole-on-the-road.jpg?s=612x612&w=0&k=20&c=bK2DcjBDFbXfNcub-Majq5osDesrvbKvmy479aSXdHs="),
     lat: 28.6161,
     lng: 77.2191,
     address: "Green Park Extension",
@@ -172,7 +172,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1002",
     category: "garbage",
-    imageUrl: photo("photo-1523293836415-86fae8d62f1b"),
+    imageUrl: ("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxChB4sh4AmbYlMsbdK6MGI5Gkr425LqRQAbepvBRpQg&s=10"),
     lat: 28.6094,
     lng: 77.1942,
     address: "Community Hall, Ward 8",
@@ -188,7 +188,7 @@ export const demoIssues: CivicIssue[] = [
   {
     id: "CIV-1038",
     category: "pothole",
-    imageUrl: photo("photo-1449824913935-59a10b8d2000"),
+    imageUrl: ("https://media.istockphoto.com/id/183362998/photo/pot-hole-on-asphalt-road.jpg?s=612x612&w=0&k=20&c=L4L39llUb0sYCB5mjNj7ZtPFsv8p9wdu12zpQlQKiOE="),
     lat: 28.632,
     lng: 77.2153,
     address: "North Gate Road, Sector 24",
