@@ -1,60 +1,59 @@
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  "http://localhost:5001/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
-async function request(
-  endpoint: string,
-  options: RequestInit = {}
-) {
-  const response = await fetch(
-    `${API_URL}${endpoint}`,
-    {
-      ...options,
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        ...(options.headers || {}),
-      },
-    }
-  );
+type IssueCategory = "pothole" | "garbage" | "streetlight";
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      data.message || "Something went wrong"
-    );
-  }
-
-  return data;
+interface SubmitIssueInput {
+  file: File;
+  category: IssueCategory;
+  latitude: number;
+  longitude: number;
+  address: string;
+  description?: string;
 }
 
-export const authApi = {
-  signup: (data: {
-    name: string;
-    email: string;
-    password: string;
-    phone?: string;
-  }) =>
-    request("/auth/signup", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+export async function submitIssue(
+  input: SubmitIssueInput,
+): Promise<{ issue: { id: string } }> {
+  const imageUrl = await fileToDataUrl(input.file);
 
-  login: (data: {
-    email: string;
-    password: string;
-  }) =>
-    request("/auth/login", {
-      method: "POST",
-      body: JSON.stringify(data),
+  return request("/issues", {
+    method: "POST",
+    body: JSON.stringify({
+      category: input.category,
+      imageUrl,
+      lat: input.latitude,
+      lng: input.longitude,
+      address: input.address,
+      description: input.description,
     }),
+  });
+}
 
-  logout: () =>
-    request("/auth/logout", {
-      method: "POST",
-    }),
+async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...(init.headers || {}),
+    },
+  });
 
-  me: () =>
-    request("/auth/me"),
-};
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(payload.error ?? "Request failed");
+  }
+
+  return payload as T;
+}
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = reject;
+
+    reader.readAsDataURL(file);
+  });
+}
