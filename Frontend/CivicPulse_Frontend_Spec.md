@@ -1,10 +1,10 @@
-# CivicPulse — Frontend Product & Engineering Specification
+# CivicFix — Frontend Product & Engineering Specification
 
 > Hackathon Problem #31: Pothole/Civic Issue Reporter with Map View. The official statement asks for citizen reporting of potholes, garbage, or streetlights using a photo and GPS pin, visible on a shared map. The specification below turns that base requirement into a stronger AI-powered civic issue lifecycle.
 
 ## 1. Product Overview
 
-**Product:** CivicPulse
+**Product:** CivicFix
 
 **Positioning:** AI-powered civic issue intelligence and resolution-tracking platform.
 
@@ -17,6 +17,7 @@ The frontend must make this lifecycle obvious.
 ### Users
 
 **Citizen**
+
 - Report a civic issue.
 - Upload photo.
 - Share/use location.
@@ -25,6 +26,7 @@ The frontend must make this lifecycle obvious.
 - Confirm whether a resolved issue is actually fixed.
 
 **Authority/Admin**
+
 - View all issues.
 - See issues on a map.
 - Review AI analysis.
@@ -39,7 +41,9 @@ The frontend must make this lifecycle obvious.
 # 2. Product Principles
 
 ### Evidence First
+
 Every issue should be represented with:
+
 - Photo
 - Location
 - Category
@@ -50,19 +54,24 @@ Every issue should be represented with:
 - Timeline
 
 ### Prioritize, Don't Just List
+
 The admin dashboard must make it immediately obvious which issues deserve attention first.
 
 ### AI Is Analysis, Not Absolute Truth
+
 Use wording such as:
+
 - `Pothole — 96% AI confidence`
 - `Severity — 8.7/10`
 
 Do not present AI as infallible.
 
 ### Lifecycle Visibility
+
 A citizen should always know where their issue stands.
 
 ### Demo First
+
 Prioritize the features that make the hackathon demo strong. Avoid low-value features that create engineering overhead.
 
 ---
@@ -70,30 +79,36 @@ Prioritize the features that make the hackathon demo strong. Avoid low-value fea
 # 3. Recommended Frontend Stack
 
 ## Core
+
 - Next.js
 - React
 - TypeScript
 - Tailwind CSS
 
 ## UI
+
 - shadcn/ui
 - Lucide icons
 
 ## Forms
+
 - React Hook Form
 - Zod where validation is useful
 
 ## Map
+
 - Leaflet
 - React-Leaflet
 - OpenStreetMap tiles
 
 ## Backend Integration
+
 - Next.js Route Handlers
 - Firebase Firestore
 - Firebase Storage or Cloudinary
 
 ## Realtime
+
 Do **not** build Socket.IO for this hackathon.
 Use Firestore realtime listeners where needed.
 
@@ -154,6 +169,7 @@ Build these five screens first.
 ## Screen 1 — Landing / Home
 
 ### Goal
+
 A visitor should understand the product in 5–10 seconds.
 
 Suggested structure:
@@ -161,7 +177,7 @@ Suggested structure:
 ```text
 ------------------------------------------------
 Navbar
-CivicPulse                         Report Issue
+CivicFix                         Report Issue
 ------------------------------------------------
 
         Report what affects
@@ -282,6 +298,7 @@ Priority
 The map is a major visual feature.
 
 Show:
+
 - Issue markers
 - Current user location when available
 - Category filters
@@ -305,6 +322,7 @@ Example filter bar:
 ### Marker behaviour
 
 Visualize severity using:
+
 - size
 - icon
 - label
@@ -361,6 +379,7 @@ Severity
 ```
 
 ## Location
+
 Show a small map.
 
 ## Citizen reports
@@ -669,8 +688,8 @@ export const demoIssues: CivicIssue[] = [
     createdAt: "2026-08-29T10:12:00Z",
     updatedAt: "2026-08-29T11:04:00Z",
     assignedTeam: "Road Maintenance",
-    aiSummary: "Large pothole causing significant road hazard."
-  }
+    aiSummary: "Large pothole causing significant road hazard.",
+  },
 ];
 ```
 
@@ -679,7 +698,7 @@ First build the complete frontend with this.
 Then replace:
 
 ```ts
-demoIssues
+demoIssues;
 ```
 
 with API/fetch/listener data.
@@ -693,7 +712,9 @@ This is the key parallel-development strategy.
 Create these instead of duplicating UI.
 
 ## IssueCard
+
 Display:
+
 - image
 - category
 - severity
@@ -703,14 +724,18 @@ Display:
 - report count
 
 ## SeverityBadge
+
 Examples:
+
 - LOW
 - MEDIUM
 - HIGH
 - CRITICAL
 
 ## StatusBadge
+
 Examples:
+
 - REPORTED
 - VERIFIED
 - IN PROGRESS
@@ -718,9 +743,11 @@ Examples:
 - CLOSED
 
 ## IssueTimeline
+
 Displays lifecycle.
 
 ## IssueMap
+
 Receives:
 
 ```ts
@@ -728,13 +755,17 @@ issues: CivicIssue[]
 ```
 
 ## IssueFilters
+
 Category / status / severity.
 
 ## PriorityCard
+
 For the admin priority queue.
 
 ## AIAnalysisCard
+
 Displays:
+
 - category
 - confidence
 - severity
@@ -748,6 +779,7 @@ Displays:
 Do not introduce Redux unless required.
 
 Use:
+
 - `useState` for local state
 - URL parameters for filters where useful
 - API/Firebase for server state
@@ -850,6 +882,7 @@ Visual character:
 **Civic infrastructure command center**
 
 Use:
+
 - clean typography
 - map-centric layouts
 - data-driven cards
@@ -859,6 +892,7 @@ Use:
 - strong whitespace
 
 Avoid:
+
 - excessive gradients
 - large marketing animations
 - excessive glassmorphism
@@ -919,6 +953,7 @@ This provides the visual effect of a realtime civic command center without an ad
 # 21. Map Strategy
 
 MVP requirements:
+
 - issue markers
 - marker click
 - current location
@@ -928,6 +963,7 @@ MVP requirements:
 - issue preview
 
 Only add later:
+
 - marker clustering
 - heatmap
 - hotspot visualization
@@ -943,6 +979,7 @@ Priority:
 Citizen reporting should be mobile-first.
 
 Report flow must work on:
+
 - mobile
 - tablet
 - desktop
@@ -958,6 +995,7 @@ Do not spend excessive time perfecting every possible breakpoint.
 ## You — Backend / AI / Integration
 
 Own:
+
 - Firebase
 - Firestore
 - API routes
@@ -972,6 +1010,7 @@ Own:
 ## Nitish — Frontend Lead
 
 Own:
+
 - page architecture
 - design system
 - layout
@@ -984,6 +1023,7 @@ Own:
 ## Third Member — Frontend Support
 
 Own:
+
 - reusable cards
 - buttons
 - badges
@@ -1002,6 +1042,7 @@ Own:
 ## Phase 1 — Skeleton
 
 Frontend:
+
 ```text
 Home
 Report
@@ -1011,6 +1052,7 @@ Admin
 ```
 
 Backend:
+
 ```text
 Firebase
 Gemini
@@ -1053,6 +1095,7 @@ Admin priority queue
 ## Phase 4 — Intelligence
 
 Add:
+
 - priority score
 - duplicate detection
 - issue clustering
@@ -1061,6 +1104,7 @@ Add:
 ## Phase 5 — Polish
 
 Add:
+
 - animations
 - loading states
 - empty states
@@ -1153,6 +1197,7 @@ This should be one of the strongest visual/demo moments.
 Prepare at least 8–12 realistic issues.
 
 Suggested mix:
+
 - 5 potholes
 - 3 garbage issues
 - 2 streetlights
@@ -1176,6 +1221,7 @@ Use realistic locations within one demo city.
 # 29. Primary Demo Issue
 
 At least one issue should show:
+
 - high severity
 - multiple citizen reports
 - high priority
@@ -1202,6 +1248,7 @@ Status: IN PROGRESS
 # 30. Performance / Reliability Rules
 
 Avoid:
+
 - repeated full data fetches
 - unnecessary client rerenders
 - multiple Gemini requests per report
@@ -1239,6 +1286,7 @@ Gemini
 # 32. Explicitly Do NOT Build
 
 Because hackathon time is limited, avoid:
+
 - full social media integrations
 - complex user profiles
 - complex authentication
@@ -1260,6 +1308,7 @@ Focus on the product story.
 # 33. Feature Priority
 
 ## P0 — Must Work
+
 - Report issue
 - Image upload
 - GPS
@@ -1272,6 +1321,7 @@ Focus on the product story.
 - Status lifecycle
 
 ## P1 — Add After P0
+
 - duplicate detection
 - priority scoring
 - realtime dashboard updates
@@ -1279,6 +1329,7 @@ Focus on the product story.
 - report aggregation
 
 ## P2 — Only If There Is Time
+
 - heatmaps
 - social signal integration
 - advanced analytics
@@ -1294,16 +1345,19 @@ Focus on the product story.
 Target duration: ~3 minutes.
 
 ### Step 1
-Open CivicPulse.
+
+Open CivicFix.
 
 Say:
 
 > "Anyone can report a civic issue with evidence and location."
 
 ### Step 2
+
 Submit a pothole photo.
 
 ### Step 3
+
 Show:
 
 ```text
@@ -1313,19 +1367,23 @@ Severity 8.7
 ```
 
 ### Step 4
+
 Open issue details.
 
 Show:
+
 - 12 citizen reports
 - Priority 92
 - lifecycle timeline
 
 ### Step 5
+
 Open admin dashboard.
 
 Show issue at top of priority queue.
 
 ### Step 6
+
 Assign team.
 
 Status:
@@ -1335,9 +1393,11 @@ ASSIGNED → IN_PROGRESS
 ```
 
 ### Step 7
+
 Upload after photo.
 
 ### Step 8
+
 Show:
 
 ```text
@@ -1346,7 +1406,7 @@ Resolution confidence: 94%
 
 ### Closing line
 
-> "CivicPulse does not stop when a complaint is submitted. It tracks whether the problem was actually resolved."
+> "CivicFix does not stop when a complaint is submitted. It tracks whether the problem was actually resolved."
 
 ---
 
@@ -1450,7 +1510,8 @@ Integration happens only after both sides have stable contracts.
 
 # Product North Star
 
-## CivicPulse
+## CivicFix
+
 ### "See a problem → prove it → prioritize it → fix it → verify it."
 
 Every feature that does not strengthen this sentence is secondary.

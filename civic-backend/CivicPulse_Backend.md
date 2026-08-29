@@ -1,10 +1,10 @@
-# CivicPulse — Backend Product & Engineering Specification
+# CivicFix — Backend Product & Engineering Specification
 
-> **Purpose:** This document is the backend implementation contract for CivicPulse. Give this file to the backend AI coding agent as the primary context before it writes or modifies backend code.
+> **Purpose:** This document is the backend implementation contract for CivicFix. Give this file to the backend AI coding agent as the primary context before it writes or modifies backend code.
 >
 > **Hackathon Problem:** #31 — Pothole/Civic Issue Reporter with Map View.
 >
-> **Database decision:** CivicPulse will use **MongoDB Atlas + Mongoose**. Do not use PostgreSQL for this project.
+> **Database decision:** CivicFix will use **MongoDB Atlas + Mongoose**. Do not use PostgreSQL for this project.
 >
 > **Important:** Implement the product pragmatically for a short hackathon. Prefer a simple, reliable architecture over production-scale infrastructure.
 
@@ -12,9 +12,9 @@
 
 # 1. Product Idea
 
-## CivicPulse
+## CivicFix
 
-CivicPulse is an AI-powered civic issue intelligence and resolution-tracking platform.
+CivicFix is an AI-powered civic issue intelligence and resolution-tracking platform.
 
 The official problem asks citizens to report civic issues such as:
 
@@ -29,7 +29,7 @@ using:
 
 and make those issues visible to others on a shared map.
 
-CivicPulse extends the base problem into a complete operational lifecycle:
+CivicFix extends the base problem into a complete operational lifecycle:
 
 ```text
 Citizen Evidence
@@ -146,6 +146,7 @@ ODM:
 **Mongoose**
 
 Why MongoDB:
+
 - very fast to set up for a hackathon
 - natural document structure for issue data
 - nested AI/resolution objects are easy to model
@@ -158,6 +159,7 @@ Why MongoDB:
 **Google Gemini multimodal API**
 
 Primary use:
+
 - image understanding
 - civic issue classification
 - severity estimation
@@ -167,6 +169,7 @@ Primary use:
 ## Image storage
 
 Use either:
+
 - Cloudinary
 - Firebase Storage
 
@@ -177,6 +180,7 @@ Pick one and keep the implementation simple.
 Do not implement Socket.IO.
 
 Where realtime behavior is useful:
+
 - frontend can use MongoDB-backed polling for the hackathon, or
 - use another lightweight mechanism only if already available.
 
@@ -269,7 +273,7 @@ Create a MongoDB Atlas project and cluster.
 Recommended database name:
 
 ```text
-civicpulse
+CivicFix
 ```
 
 Connection:
@@ -477,7 +481,7 @@ Schemas should provide:
 Use:
 
 ```js
-timestamps: true
+timestamps: true;
 ```
 
 where appropriate.
@@ -521,7 +525,7 @@ const ISSUE_STATUSES = [
   "IN_PROGRESS",
   "RESOLVED",
   "RESOLUTION_VERIFIED",
-  "CLOSED"
+  "CLOSED",
 ];
 ```
 
@@ -787,10 +791,11 @@ src/services/ai.service.js
 Main function:
 
 ```js
-analyzeIssueImage(imageUrl)
+analyzeIssueImage(imageUrl);
 ```
 
 Input:
+
 - civic issue image
 - optional description
 
@@ -931,10 +936,7 @@ priority =
 Example:
 
 ```js
-const rawScore =
-  severity * 6 +
-  Math.min(reportCount, 10) * 2 +
-  roadWeight * 10;
+const rawScore = severity * 6 + Math.min(reportCount, 10) * 2 + roadWeight * 10;
 ```
 
 Normalize to `0–100`.
@@ -1045,6 +1047,7 @@ src/services/resolution.service.js
 ```
 
 Inputs:
+
 - before image
 - after image
 
@@ -1060,6 +1063,7 @@ Optional Gemini response:
 ```
 
 Important:
+
 - AI output is an assessment, not unquestionable proof.
 - Store both pieces of evidence.
 - Allow citizen confirmation.
@@ -1111,7 +1115,7 @@ For the MVP, the main query patterns are:
 ### All issues
 
 ```js
-Issue.find().sort({ priority: -1 })
+Issue.find().sort({ priority: -1 });
 ```
 
 ### Filtered issues
@@ -1119,14 +1123,14 @@ Issue.find().sort({ priority: -1 })
 ```js
 Issue.find({
   status: "IN_PROGRESS",
-  category: "pothole"
-})
+  category: "pothole",
+});
 ```
 
 ### Single issue
 
 ```js
-Issue.findOne({ issueId })
+Issue.findOne({ issueId });
 ```
 
 ### Nearby duplicate search
@@ -1136,7 +1140,7 @@ Use `$near` with a `2dsphere` index.
 ### Activity timeline
 
 ```js
-Activity.find({ issueId }).sort({ createdAt: 1 })
+Activity.find({ issueId }).sort({ createdAt: 1 });
 ```
 
 Do not add complex aggregation pipelines until the simple queries are working.
@@ -1166,6 +1170,7 @@ Create indexes only for actual query patterns.
 Validate every incoming request.
 
 At minimum:
+
 - required fields
 - valid latitude
 - valid longitude
@@ -1264,6 +1269,7 @@ Backend/Gemini
 Do not send enormous base64 payloads through multiple JSON layers unless unavoidable.
 
 Recommended:
+
 - compress large images
 - upload once
 - store remote URL
@@ -1306,9 +1312,11 @@ For this hackathon, realtime behavior is not a core requirement.
 Options:
 
 ### Preferred
+
 Frontend reads current issue state after mutations.
 
 ### Optional
+
 Frontend uses lightweight polling or another already-configured mechanism.
 
 The priority is:
@@ -1350,11 +1358,13 @@ ADMIN
 ```
 
 Admin operations:
+
 - assignment
 - status changes
 - resolution submission
 
 Citizen operations:
+
 - create report
 - view issues
 - confirm resolution
@@ -1430,7 +1440,7 @@ return:
 ```json
 {
   "success": true,
-  "message": "CivicPulse Backend is running"
+  "message": "CivicFix Backend is running"
 }
 ```
 
@@ -1449,6 +1459,7 @@ Verify connection before continuing.
 ## Step 3 — Mongoose Models
 
 Create:
+
 - Issue
 - Report
 - Activity
@@ -1486,6 +1497,7 @@ Frontend can now consume real data.
 ## Step 8 — Status lifecycle
 
 Implement:
+
 - verify
 - assign
 - in progress
@@ -1606,6 +1618,7 @@ CLOSED
 Do not rely on every external service during the presentation.
 
 Prepare:
+
 - seeded MongoDB demo issues
 - known working images
 - known working AI prompt
@@ -1632,6 +1645,7 @@ Only one new issue needs to be created live during the demo.
 # 43. Testing Checklist
 
 ## API
+
 - [ ] server starts
 - [ ] MongoDB connects
 - [ ] GET /
@@ -1642,12 +1656,14 @@ Only one new issue needs to be created live during the demo.
 - [ ] resolve issue
 
 ## AI
+
 - [ ] valid civic image
 - [ ] unclear image
 - [ ] unsupported object
 - [ ] Gemini failure
 
 ## Database
+
 - [ ] issue saved
 - [ ] report saved
 - [ ] activity saved
@@ -1656,6 +1672,7 @@ Only one new issue needs to be created live during the demo.
 - [ ] duplicate lookup works
 
 ## Edge Cases
+
 - [ ] missing coordinates
 - [ ] invalid coordinates
 - [ ] missing image
@@ -1715,6 +1732,7 @@ Example:
 ```
 
 Do not log:
+
 - secrets
 - API keys
 - sensitive credentials
@@ -1860,7 +1878,7 @@ VERIFY
 CLOSE
 ```
 
-CivicPulse is not simply a complaint database.
+CivicFix is not simply a complaint database.
 
 It is a **civic issue intelligence and resolution loop**.
 
@@ -1909,7 +1927,7 @@ Gemini
 
 # Product North Star
 
-## CivicPulse
+## CivicFix
 
 **See a problem → prove it → understand it → prioritize it → fix it → verify it.**
 

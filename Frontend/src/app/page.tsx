@@ -339,7 +339,7 @@ export default function Home() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-[10px] font-black tracking-[0.16em] text-emerald-300">
               <Sparkles size={12} />
-              THE CIVICPULSE LIFECYCLE
+              THE CivicFix LIFECYCLE
             </div>
 
             <h2 className="mt-5 text-3xl font-black tracking-[-0.045em] sm:text-4xl">
@@ -347,8 +347,8 @@ export default function Home() {
             </h2>
 
             <p className="mt-4 text-sm leading-7 text-slate-400">
-              CivicPulse creates a transparent chain of evidence from the moment
-              a problem is reported until the repair is verified.
+              CivicFix creates a transparent chain of evidence from the moment a
+              problem is reported until the repair is verified.
             </p>
           </div>
 

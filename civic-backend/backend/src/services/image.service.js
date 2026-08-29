@@ -16,7 +16,7 @@ export async function uploadImage(base64Data, options = {}) {
     }
 
     const uploadOptions = {
-      folder: "civicpulse/issues",
+      folder: "CivicFix/issues",
       resource_type: "auto",
       quality: "auto",
       fetch_format: "auto",
@@ -30,7 +30,9 @@ export async function uploadImage(base64Data, options = {}) {
     };
 
     // If data is base64, add 'data:' prefix
-    const imageData = base64Data.startsWith("data:") ? base64Data : `data:image/jpeg;base64,${base64Data}`;
+    const imageData = base64Data.startsWith("data:")
+      ? base64Data
+      : `data:image/jpeg;base64,${base64Data}`;
 
     const result = await cloudinary.uploader.upload(imageData, uploadOptions);
 
@@ -53,28 +55,31 @@ export async function uploadImageFile(fileStream, options = {}) {
   try {
     return new Promise((resolve, reject) => {
       const uploadOptions = {
-        folder: "civicpulse/issues",
+        folder: "CivicFix/issues",
         resource_type: "auto",
         quality: "auto",
         fetch_format: "auto",
         ...options,
       };
 
-      const uploadStream = cloudinary.uploader.upload_stream(uploadOptions, (error, result) => {
-        if (error) {
-          reject(new Error(`Failed to upload image: ${error.message}`));
-        } else {
-          resolve({
-            url: result.secure_url,
-            publicId: result.public_id,
-            version: result.version,
-            format: result.format,
-            height: result.height,
-            width: result.width,
-            bytes: result.bytes,
-          });
-        }
-      });
+      const uploadStream = cloudinary.uploader.upload_stream(
+        uploadOptions,
+        (error, result) => {
+          if (error) {
+            reject(new Error(`Failed to upload image: ${error.message}`));
+          } else {
+            resolve({
+              url: result.secure_url,
+              publicId: result.public_id,
+              version: result.version,
+              format: result.format,
+              height: result.height,
+              width: result.width,
+              bytes: result.bytes,
+            });
+          }
+        },
+      );
 
       fileStream.pipe(uploadStream);
     });

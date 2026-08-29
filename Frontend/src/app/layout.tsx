@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "CivicPulse — Civic Intelligence",
+  title: "CivicFix — Civic Intelligence",
   description: "Evidence-backed civic action",
 };
 export default function RootLayout({

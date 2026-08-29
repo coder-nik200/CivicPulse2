@@ -83,7 +83,7 @@ export function Navbar({ dark = false }: { dark?: boolean }) {
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-civic text-white">
             <MapPin size={17} />
           </span>
-          CivicPulse
+          CivicFix
         </Link>
         <div className="hidden items-center gap-7 md:flex">
           <Link className={`navlink ${tone}`} href="/">
