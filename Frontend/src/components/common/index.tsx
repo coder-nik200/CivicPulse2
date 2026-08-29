@@ -12,7 +12,13 @@ interface ModalProps {
   size?: "sm" | "md" | "lg";
 }
 
-export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalProps) {
+export function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  size = "md",
+}: ModalProps) {
   if (!isOpen) return null;
 
   const sizeClass = {
@@ -23,7 +29,9 @@ export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalPr
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className={`relative w-full ${sizeClass} rounded-2xl bg-white p-6 shadow-xl`}>
+      <div
+        className={`relative w-full ${sizeClass} rounded-2xl bg-white p-6 shadow-xl`}
+      >
         {title && (
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-bold text-slate-900">{title}</h2>
@@ -68,7 +76,11 @@ interface CardProps {
   hoverable?: boolean;
 }
 
-export function Card({ children, className = "", hoverable = false }: CardProps) {
+export function Card({
+  children,
+  className = "",
+  hoverable = false,
+}: CardProps) {
   return (
     <div
       className={`rounded-xl border border-slate-200 bg-white p-4 ${
@@ -87,7 +99,11 @@ interface BadgeProps {
   size?: "sm" | "md";
 }
 
-export function Badge({ children, variant = "primary", size = "sm" }: BadgeProps) {
+export function Badge({
+  children,
+  variant = "primary",
+  size = "sm",
+}: BadgeProps) {
   const variants = {
     primary: "bg-teal-50 text-teal-700 border-teal-100",
     success: "bg-emerald-50 text-emerald-700 border-emerald-100",
@@ -102,7 +118,9 @@ export function Badge({ children, variant = "primary", size = "sm" }: BadgeProps
   };
 
   return (
-    <span className={`inline-flex items-center rounded-full border ${variants[variant]} ${sizes[size]}`}>
+    <span
+      className={`inline-flex items-center rounded-full border ${variants[variant]} ${sizes[size]}`}
+    >
       {children}
     </span>
   );
@@ -154,7 +172,9 @@ export function Spinner({ size = "md" }: SpinnerProps) {
   };
 
   return (
-    <div className={`${sizes[size]} animate-spin rounded-full border-teal-200 border-t-teal-600`} />
+    <div
+      className={`${sizes[size]} animate-spin rounded-full border-teal-200 border-t-teal-600`}
+    />
   );
 }
 
@@ -169,12 +189,19 @@ interface EmptyStateProps {
   };
 }
 
-export function EmptyState({ icon, title, description, action }: EmptyStateProps) {
+export function EmptyState({
+  icon,
+  title,
+  description,
+  action,
+}: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
       <div className="mb-4 text-slate-300">{icon}</div>
       <h3 className="text-lg font-bold text-slate-900">{title}</h3>
-      {description && <p className="mt-2 text-sm text-slate-500">{description}</p>}
+      {description && (
+        <p className="mt-2 text-sm text-slate-500">{description}</p>
+      )}
       {action && (
         <button
           onClick={action.onClick}

@@ -1,1 +1,9 @@
-{}
+{
+  "app/map/page.tsx -> @/components/civic-map": {
+    "id": "app/map/page.tsx -> @/components/civic-map",
+    "files": [
+      "static/css/_app-pages-browser_src_components_civic-map_tsx.css",
+      "static/chunks/_app-pages-browser_src_components_civic-map_tsx.js"
+    ]
+  }
+}

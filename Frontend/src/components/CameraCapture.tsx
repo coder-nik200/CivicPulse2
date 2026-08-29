@@ -14,7 +14,9 @@ interface CameraCaptureProps {
 export function CameraCapture({ onCapture, onCancel }: CameraCaptureProps) {
   const camera = useCamera();
   const [showPreview, setShowPreview] = useState(false);
-  const [facingMode, setFacingMode] = useState<"environment" | "user">("environment");
+  const [facingMode, setFacingMode] = useState<"environment" | "user">(
+    "environment",
+  );
 
   useEffect(() => {
     camera.startCamera();
@@ -44,7 +46,7 @@ export function CameraCapture({ onCapture, onCancel }: CameraCaptureProps) {
     camera.stopCamera();
     const newMode = facingMode === "environment" ? "user" : "environment";
     setFacingMode(newMode);
-    
+
     // Reinitialize camera with new facing mode
     setTimeout(() => {
       camera.startCamera();
@@ -66,10 +68,7 @@ export function CameraCapture({ onCapture, onCancel }: CameraCaptureProps) {
               }
             }}
           />
-          <canvas
-            ref={camera.canvasRef}
-            className="hidden"
-          />
+          <canvas ref={camera.canvasRef} className="hidden" />
         </div>
 
         {camera.error && (
@@ -180,7 +179,10 @@ interface GalleryUploadProps {
   accept?: string;
 }
 
-export function GalleryUpload({ onUpload, accept = "image/*" }: GalleryUploadProps) {
+export function GalleryUpload({
+  onUpload,
+  accept = "image/*",
+}: GalleryUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -227,18 +229,25 @@ interface ImageCaptureModalProps {
   onCancel: () => void;
 }
 
-export function ImageCaptureModal({ onCapture, onCancel }: ImageCaptureModalProps) {
+export function ImageCaptureModal({
+  onCapture,
+  onCancel,
+}: ImageCaptureModalProps) {
   const [mode, setMode] = useState<"select" | "camera" | "gallery">("select");
 
   if (mode === "camera") {
-    return <CameraCapture onCapture={onCapture} onCancel={() => setMode("select")} />;
+    return (
+      <CameraCapture onCapture={onCapture} onCancel={() => setMode("select")} />
+    );
   }
 
   if (mode === "gallery") {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
         <div className="w-full max-w-sm rounded-2xl bg-white p-6">
-          <h2 className="text-xl font-bold text-slate-900 mb-4">Choose Source</h2>
+          <h2 className="text-xl font-bold text-slate-900 mb-4">
+            Choose Source
+          </h2>
           <GalleryUpload onUpload={onCapture} />
           <button
             onClick={() => setMode("select")}
@@ -255,7 +264,9 @@ export function ImageCaptureModal({ onCapture, onCancel }: ImageCaptureModalProp
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="w-full max-w-sm rounded-2xl bg-white p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-slate-900">Capture Issue Photo</h2>
+          <h2 className="text-xl font-bold text-slate-900">
+            Capture Issue Photo
+          </h2>
           <button
             onClick={onCancel}
             className="rounded-lg p-1 text-slate-500 hover:bg-slate-100"

@@ -9,11 +9,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-teal-600 text-white hover:bg-teal-700 focus-visible:ring-teal-500",
-        secondary: "bg-slate-200 text-slate-900 hover:bg-slate-300 focus-visible:ring-slate-400",
-        outline: "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 focus-visible:ring-slate-500",
+        primary:
+          "bg-teal-600 text-white hover:bg-teal-700 focus-visible:ring-teal-500",
+        secondary:
+          "bg-slate-200 text-slate-900 hover:bg-slate-300 focus-visible:ring-slate-400",
+        outline:
+          "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 focus-visible:ring-slate-500",
         ghost: "text-slate-600 hover:bg-slate-50 focus-visible:ring-slate-400",
-        danger: "bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500",
+        danger:
+          "bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500",
       },
       size: {
         sm: "h-8 px-3 text-xs",
@@ -27,15 +31,22 @@ const buttonVariants = cva(
       variant: "primary",
       size: "md",
     },
-  }
+  },
 );
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {}
+interface ButtonProps
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {}
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, ...props }, ref) => (
-    <button ref={ref} className={buttonVariants({ variant, size, className: className })} {...props} />
-  )
+    <button
+      ref={ref}
+      className={buttonVariants({ variant, size, className: className })}
+      {...props}
+    />
+  ),
 );
 Button.displayName = "Button";
 
@@ -45,17 +56,22 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-slate-200 focus-visible:border-teal-500 focus-visible:ring-teal-500",
-        error: "border-red-300 focus-visible:border-red-500 focus-visible:ring-red-500",
+        default:
+          "border-slate-200 focus-visible:border-teal-500 focus-visible:ring-teal-500",
+        error:
+          "border-red-300 focus-visible:border-red-500 focus-visible:ring-red-500",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 );
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>, VariantProps<typeof inputVariants> {}
+interface InputProps
+  extends
+    React.InputHTMLAttributes<HTMLInputElement>,
+    VariantProps<typeof inputVariants> {}
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, variant, ...props }, ref) => (
@@ -64,7 +80,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       className={inputVariants({ variant, className })}
       {...props}
     />
-  )
+  ),
 );
 Input.displayName = "Input";
 
@@ -91,7 +107,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       className={`flex min-h-[100px] w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-base transition-colors placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-500 ${className || ""}`}
       {...props}
     />
-  )
+  ),
 );
 Textarea.displayName = "Textarea";
 
@@ -107,6 +123,6 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     >
       {children}
     </select>
-  )
+  ),
 );
 Select.displayName = "Select";

@@ -11,13 +11,10 @@ npm run dev
 
 Open `http://localhost:3000`. The included Next.js API (`/api/issues`) is used automatically, so no database, API key, or second process is required for the demo.
 
-<<<<<<< HEAD
-=======
 ## Map experience
 
 The map page uses Leaflet with OpenStreetMap tiles, real marker coordinates, marker clusters, category and priority filters, synchronized nearby-issue selection, browser geolocation, responsive controls, and live OpenStreetMap/Nominatim place search. Internet access is required by the browser for map tiles and place suggestions.
 
->>>>>>> a291098 (Commit changes)
 ## API
 
 | Method | Route | Purpose |
@@ -43,10 +40,7 @@ To use it, create `.env.local` in this directory with `NEXT_PUBLIC_API_URL=http:
 
 - The demo uses in-memory data. Restarting either server resets newly submitted reports.
 - Do not add API keys to the frontend; external AI and database services are optional future integrations.
-<<<<<<< HEAD
-=======
 
 ## Full-stack flows
 
 The built-in API is the active source of truth for the running demo. It supports geographically bounded and nearby issue queries, validated lifecycle transitions with status history, dashboard metrics, and event-driven notifications. The admin dashboard refreshes automatically and updates are immediately visible to the map and issue-detail views.
->>>>>>> a291098 (Commit changes)

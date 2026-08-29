@@ -8,14 +8,10 @@
     "static/development/_buildManifest.js",
     "static/development/_ssgManifest.js"
   ],
-<<<<<<< HEAD
-  "rootMainFiles": [],
-=======
   "rootMainFiles": [
     "static/chunks/webpack.js",
     "static/chunks/main-app.js"
   ],
->>>>>>> a291098 (Commit changes)
   "rootMainFilesTree": {},
   "pages": {
     "/_app": []

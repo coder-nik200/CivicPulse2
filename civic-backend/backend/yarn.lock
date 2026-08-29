@@ -7,25 +7,18 @@
   resolved "https://registry.npmjs.org/@google/generative-ai/-/generative-ai-0.21.0.tgz"
   integrity sha512-7XhUbtnlkSEZK15kN3t+tzIMxsbKm/dSkKBFalj+20NvPKe1kBY7mR2P7vuijEn+f06z5+A8bVGKO0v39cr6Wg==
 
-<<<<<<< HEAD
 "@mongodb-js/saslprep@^1.3.0", "@mongodb-js/saslprep@^1.4.11":
-=======
-"@mongodb-js/saslprep@^1.3.0":
->>>>>>> a291098 (Commit changes)
   version "1.5.0"
   resolved "https://registry.npmjs.org/@mongodb-js/saslprep/-/saslprep-1.5.0.tgz"
   integrity sha512-Hk1SKJCMcCos38+vqDnZzlIo4XRj9yCGzYkjB4LcqpeXRIYfia1UWTz+VrueLxoU+uSRJzgkufxoRZg8gi52YA==
   dependencies:
     sparse-bitfield "^3.0.3"
 
-<<<<<<< HEAD
 "@standard-schema/spec@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npmjs.org/@standard-schema/spec/-/spec-1.1.0.tgz"
   integrity sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==
 
-=======
->>>>>>> a291098 (Commit changes)
 "@types/webidl-conversions@*":
   version "7.0.3"
   resolved "https://registry.npmjs.org/@types/webidl-conversions/-/webidl-conversions-7.0.3.tgz"
@@ -38,7 +31,6 @@
   dependencies:
     "@types/webidl-conversions" "*"
 
-<<<<<<< HEAD
 "@types/whatwg-url@^13.0.0":
   version "13.0.0"
   resolved "https://registry.npmjs.org/@types/whatwg-url/-/whatwg-url-13.0.0.tgz"
@@ -46,8 +38,6 @@
   dependencies:
     "@types/webidl-conversions" "*"
 
-=======
->>>>>>> a291098 (Commit changes)
 accepts@~1.3.8:
   version "1.3.8"
   resolved "https://registry.npmjs.org/accepts/-/accepts-1.3.8.tgz"
@@ -116,14 +106,11 @@ bson@^6.10.4:
   resolved "https://registry.npmjs.org/bson/-/bson-6.10.4.tgz"
   integrity sha512-WIsKqkSC0ABoBJuT1LEX+2HEvNmNKKgnTAyd0fL8qzK4SH2i9NXg+t08YtdZp/V9IZ33cxe3iV4yM0qg8lMQng==
 
-<<<<<<< HEAD
 bson@^7.2.0:
   version "7.3.2"
   resolved "https://registry.npmjs.org/bson/-/bson-7.3.2.tgz"
   integrity sha512-1w0ra+ho1cuE+w8jzwgzTFIimFtCfZeCoOsvIPQg6uyFCsp8M29U7bNNf5GrFh88TXbYg1g3TyKUGpd6O7q6zA==
 
-=======
->>>>>>> a291098 (Commit changes)
 bytes@~3.1.2:
   version "3.1.2"
   resolved "https://registry.npmjs.org/bytes/-/bytes-3.1.2.tgz"
@@ -160,7 +147,6 @@ chokidar@^3.5.2:
   optionalDependencies:
     fsevents "~2.3.2"
 
-<<<<<<< HEAD
 cloudinary@^2.11.0:
   version "2.11.0"
   resolved "https://registry.npmjs.org/cloudinary/-/cloudinary-2.11.0.tgz"
@@ -168,8 +154,6 @@ cloudinary@^2.11.0:
   dependencies:
     lodash "^4.17.23"
 
-=======
->>>>>>> a291098 (Commit changes)
 content-disposition@~0.5.4:
   version "0.5.4"
   resolved "https://registry.npmjs.org/content-disposition/-/content-disposition-0.5.4.tgz"
@@ -462,7 +446,6 @@ is-number@^7.0.0:
   resolved "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz"
   integrity sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
 
-<<<<<<< HEAD
 kareem@3.3.0:
   version "3.3.0"
   resolved "https://registry.npmjs.org/kareem/-/kareem-3.3.0.tgz"
@@ -473,8 +456,6 @@ lodash@^4.17.23:
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz"
   integrity sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==
 
-=======
->>>>>>> a291098 (Commit changes)
 math-intrinsics@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/math-intrinsics/-/math-intrinsics-1.1.0.tgz"
@@ -532,7 +513,6 @@ mongodb-connection-string-url@^3.0.2:
     "@types/whatwg-url" "^11.0.2"
     whatwg-url "^14.1.0 || ^13.0.0"
 
-<<<<<<< HEAD
 mongodb-connection-string-url@^7.0.1:
   version "7.0.2"
   resolved "https://registry.npmjs.org/mongodb-connection-string-url/-/mongodb-connection-string-url-7.0.2.tgz"
@@ -541,8 +521,6 @@ mongodb-connection-string-url@^7.0.1:
     "@types/whatwg-url" "^13.0.0"
     whatwg-url "^14.1.0"
 
-=======
->>>>>>> a291098 (Commit changes)
 mongodb@^6.8.0:
   version "6.21.0"
   resolved "https://registry.npmjs.org/mongodb/-/mongodb-6.21.0.tgz"
@@ -552,7 +530,6 @@ mongodb@^6.8.0:
     bson "^6.10.4"
     mongodb-connection-string-url "^3.0.2"
 
-<<<<<<< HEAD
 mongodb@~7.5:
   version "7.5.0"
   resolved "https://registry.npmjs.org/mongodb/-/mongodb-7.5.0.tgz"
@@ -585,8 +562,6 @@ mquery@6.0.0:
   resolved "https://registry.npmjs.org/mquery/-/mquery-6.0.0.tgz"
   integrity sha512-b2KQNsmgtkscfeDgkYMcWGn9vZI9YoXh802VDEwE6qc50zxBFQ0Oo8ROkawbPAsXCY1/Z1yp0MagqsZStPWJjw==
 
-=======
->>>>>>> a291098 (Commit changes)
 ms@^2.1.3, ms@2.1.3:
   version "2.1.3"
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
@@ -792,14 +767,11 @@ side-channel@^1.1.1:
     side-channel-map "^1.0.1"
     side-channel-weakmap "^1.0.2"
 
-<<<<<<< HEAD
 sift@17.1.3:
   version "17.1.3"
   resolved "https://registry.npmjs.org/sift/-/sift-17.1.3.tgz"
   integrity sha512-Rtlj66/b0ICeFzYTuNvX/EF1igRbbnGSvEyT79McoZa/DeGhMyC5pWKOEsZKnpkqtSeovd5FL/bjHWC3CIIvCQ==
 
-=======
->>>>>>> a291098 (Commit changes)
 simple-update-notifier@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/simple-update-notifier/-/simple-update-notifier-2.0.0.tgz"
@@ -883,11 +855,7 @@ webidl-conversions@^7.0.0:
   resolved "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-7.0.0.tgz"
   integrity sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==
 
-<<<<<<< HEAD
 whatwg-url@^14.1.0, "whatwg-url@^14.1.0 || ^13.0.0":
-=======
-"whatwg-url@^14.1.0 || ^13.0.0":
->>>>>>> a291098 (Commit changes)
   version "14.2.0"
   resolved "https://registry.npmjs.org/whatwg-url/-/whatwg-url-14.2.0.tgz"
   integrity sha512-De72GdQZzNTUBBChsXueQUnPKDkg/5A5zp7pFDuQAj5UFoENpiACU0wlCvzpAGnTkj++ihpKwKyYewn/XNUbKw==

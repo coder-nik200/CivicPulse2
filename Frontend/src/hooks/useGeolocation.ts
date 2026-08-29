@@ -56,7 +56,8 @@ export function useGeolocation(): UseGeolocationReturn {
           (err) => {
             let message = "Failed to get location";
             if (err.code === err.PERMISSION_DENIED) {
-              message = "Location permission denied. Please enable location access.";
+              message =
+                "Location permission denied. Please enable location access.";
             } else if (err.code === err.POSITION_UNAVAILABLE) {
               message = "Location information is unavailable.";
             } else if (err.code === err.TIMEOUT) {
@@ -69,11 +70,12 @@ export function useGeolocation(): UseGeolocationReturn {
             enableHighAccuracy: true,
             timeout: 10000,
             maximumAge: 0,
-          }
+          },
         );
       });
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to get location";
+      const message =
+        err instanceof Error ? err.message : "Failed to get location";
       setError(message);
       return null;
     } finally {
@@ -96,21 +98,26 @@ export function useGeolocation(): UseGeolocationReturn {
 }
 
 // Reverse geocoding function (using OpenStreetMap nominatim as fallback)
-async function reverseGeocode(latitude: number, longitude: number): Promise<string> {
+async function reverseGeocode(
+  latitude: number,
+  longitude: number,
+): Promise<string> {
   try {
     const response = await fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
       {
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
         },
-      }
+      },
     );
 
     if (!response.ok) throw new Error("Reverse geocoding failed");
 
     const data: any = await response.json();
-    return data.address?.road || data.address?.city || `${latitude}, ${longitude}`;
+    return (
+      data.address?.road || data.address?.city || `${latitude}, ${longitude}`
+    );
   } catch (err) {
     // Return coordinates if geocoding fails
     return `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;

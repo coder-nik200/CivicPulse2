@@ -1,7 +1,22 @@
 import { z } from "zod";
 
-export const issueCategories = ["pothole", "garbage", "streetlight", "obstruction", "waterlogging"] as const;
-export const issueStatuses = ["REPORTED", "AI_ANALYZED", "VERIFIED", "ASSIGNED", "IN_PROGRESS", "RESOLVED", "RESOLUTION_VERIFIED", "CLOSED"] as const;
+export const issueCategories = [
+  "pothole",
+  "garbage",
+  "streetlight",
+  "obstruction",
+  "waterlogging",
+] as const;
+export const issueStatuses = [
+  "REPORTED",
+  "AI_ANALYZED",
+  "VERIFIED",
+  "ASSIGNED",
+  "IN_PROGRESS",
+  "RESOLVED",
+  "RESOLUTION_VERIFIED",
+  "CLOSED",
+] as const;
 
 export const createIssueSchema = z.object({
   category: z.enum(issueCategories),

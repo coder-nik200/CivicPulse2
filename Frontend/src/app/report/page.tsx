@@ -25,7 +25,9 @@ export default function ReportPage() {
   const [done, setDone] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [note, setNote] = useState("");
-  const [category, setCategory] = useState<"pothole" | "garbage" | "streetlight">("pothole");
+  const [category, setCategory] = useState<
+    "pothole" | "garbage" | "streetlight"
+  >("pothole");
   const [imageUrl, setImageUrl] = useState("");
   const [issueId, setIssueId] = useState("CIV-1024");
   const [error, setError] = useState("");
@@ -41,10 +43,25 @@ export default function ReportPage() {
 
   const locate = () => {
     setLocating(true);
-    if (!navigator.geolocation) { setLocating(false); setError("Location is unavailable in this browser. You can place a pin manually."); return; }
+    if (!navigator.geolocation) {
+      setLocating(false);
+      setError(
+        "Location is unavailable in this browser. You can place a pin manually.",
+      );
+      return;
+    }
     navigator.geolocation.getCurrentPosition(
-      () => { setLocating(false); setLocated(true); },
-      () => { setLocating(false); setLocated(true); setError("We couldn’t access your location, so a manual demo pin was used. You can still submit the report."); },
+      () => {
+        setLocating(false);
+        setLocated(true);
+      },
+      () => {
+        setLocating(false);
+        setLocated(true);
+        setError(
+          "We couldn’t access your location, so a manual demo pin was used. You can still submit the report.",
+        );
+      },
       { enableHighAccuracy: true, timeout: 8000 },
     );
   };
@@ -54,10 +71,24 @@ export default function ReportPage() {
     setError("");
     try {
       if (!file) return;
-      const payload = await submitIssue({ file, category, latitude: 28.6139, longitude: 77.209, address: "Outer Ring Road, Sector 15", description: note || undefined });
+      const payload = await submitIssue({
+        file,
+        category,
+        latitude: 28.6139,
+        longitude: 77.209,
+        address: "Outer Ring Road, Sector 15",
+        description: note || undefined,
+      });
       setIssueId(payload.issue.id);
       setTimeout(() => setDone(true), 700);
-    } catch (submissionError) { setError(submissionError instanceof Error ? submissionError.message : "Your report could not be submitted."); setAnalysis(false); }
+    } catch (submissionError) {
+      setError(
+        submissionError instanceof Error
+          ? submissionError.message
+          : "Your report could not be submitted.",
+      );
+      setAnalysis(false);
+    }
   };
 
   if (done) {
@@ -260,10 +291,25 @@ export default function ReportPage() {
           {/* Form */}
           <div className="mt-6 space-y-4 sm:mt-8 sm:space-y-5">
             <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_10px_35px_rgba(15,23,42,0.035)] sm:p-6">
-              <span className="font-mono text-[10px] font-bold text-civic">01</span>
-              <h2 className="mt-1 text-base font-black text-slate-950 sm:text-lg">What did you see?</h2>
+              <span className="font-mono text-[10px] font-bold text-civic">
+                01
+              </span>
+              <h2 className="mt-1 text-base font-black text-slate-950 sm:text-lg">
+                What did you see?
+              </h2>
               <div className="mt-4 grid grid-cols-3 gap-2">
-                {(["pothole", "garbage", "streetlight"] as const).map((item) => <button key={item} type="button" onClick={() => setCategory(item)} className={`rounded-xl border px-2 py-3 text-xs font-black capitalize transition ${category === item ? "border-civic bg-teal-50 text-civic" : "border-slate-200 text-slate-600 hover:border-teal-200"}`}>{item}</button>)}
+                {(["pothole", "garbage", "streetlight"] as const).map(
+                  (item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => setCategory(item)}
+                      className={`rounded-xl border px-2 py-3 text-xs font-black capitalize transition ${category === item ? "border-civic bg-teal-50 text-civic" : "border-slate-200 text-slate-600 hover:border-teal-200"}`}
+                    >
+                      {item}
+                    </button>
+                  ),
+                )}
               </div>
             </section>
             {/* Photo */}
@@ -310,7 +356,10 @@ export default function ReportPage() {
 
                     <button
                       type="button"
-                      onClick={() => { setFile(null); setImageUrl(""); }}
+                      onClick={() => {
+                        setFile(null);
+                        setImageUrl("");
+                      }}
                       aria-label="Remove image"
                       className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-400 transition hover:bg-white hover:text-rose-500"
                     >
@@ -361,7 +410,11 @@ export default function ReportPage() {
                 </label>
               )}
             </section>
-            {error && <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-800">{error}</p>}
+            {error && (
+              <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-800">
+                {error}
+              </p>
+            )}
 
             {/* Location */}
             <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_10px_35px_rgba(15,23,42,0.035)] sm:p-6">

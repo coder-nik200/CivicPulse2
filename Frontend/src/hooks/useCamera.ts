@@ -15,7 +15,9 @@ interface UseCameraReturn {
   canvasRef: React.RefObject<HTMLCanvasElement>;
 }
 
-export function useCamera(facingMode: "user" | "environment" = "environment"): UseCameraReturn {
+export function useCamera(
+  facingMode: "user" | "environment" = "environment",
+): UseCameraReturn {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
@@ -86,7 +88,7 @@ export function useCamera(facingMode: "user" | "environment" = "environment"): U
         0,
         0,
         videoRef.current.videoWidth,
-        videoRef.current.videoHeight
+        videoRef.current.videoHeight,
       );
 
       const imageData = canvasRef.current.toDataURL("image/jpeg", 0.95);
