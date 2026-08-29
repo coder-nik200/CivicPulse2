@@ -1,14 +1,28 @@
 import { signupUser, loginUser } from "../services/auth.service.js";
+
 import jwt from "jsonwebtoken";
+
 import { ObjectId } from "mongodb";
+
 import { db } from "../config/db.js";
 
-const users = () => db.collection("users");
+/* =========================================================
+   USERS COLLECTION
+========================================================= */
+
+const usersCollection = () => db.collection("users");
+
+/* =========================================================
+   COOKIE OPTIONS
+========================================================= */
 
 const cookieOptions = {
   httpOnly: true,
+
   secure: process.env.NODE_ENV === "production",
+
   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
@@ -18,7 +32,13 @@ const cookieOptions = {
 
 export async function signup(req, res) {
   try {
+    console.log("Signup request body:", req.body);
+
     const { name, email, password, phone, role } = req.body;
+
+    /* ---------------------------------------------
+       VALIDATION
+    --------------------------------------------- */
 
     if (!name || !email || !password || !role) {
       return res.status(400).json({
@@ -43,34 +63,63 @@ export async function signup(req, res) {
       });
     }
 
+    const cleanName = name.trim();
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    const cleanPhone = phone?.trim() || undefined;
+
+    /* ---------------------------------------------
+       CREATE USER
+    --------------------------------------------- */
+
     const user = await signupUser({
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
+      name: cleanName,
+      email: cleanEmail,
       password,
-      phone: phone?.trim(),
+      phone: cleanPhone,
       role,
     });
 
-    const { token } = await loginUser(
-      email.trim().toLowerCase(),
-      password
-    );
+    /* ---------------------------------------------
+       LOGIN AFTER SIGNUP
+    --------------------------------------------- */
+
+    const { token } = await loginUser(cleanEmail, password);
+
+    /* ---------------------------------------------
+       SEND COOKIE
+    --------------------------------------------- */
 
     res
       .cookie("civicplus_token", token, cookieOptions)
       .status(201)
       .json({
         success: true,
+
         message: "Account created successfully",
-        user,
+
+        user: {
+          id: user.id || user._id?.toString(),
+
+          name: user.name,
+
+          email: user.email,
+
+          phone: user.phone,
+
+          role: user.role,
+
+          avatar: user.avatar,
+        },
       });
   } catch (error) {
     console.error("Signup error:", error);
 
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
-      message:
-        error instanceof Error ? error.message : "Signup failed",
+
+      message: error instanceof Error ? error.message : "Signup failed",
     });
   }
 }
@@ -90,21 +139,38 @@ export async function login(req, res) {
       });
     }
 
-    const { token, user } = await loginUser(
-      email.trim().toLowerCase(),
-      password,
-    );
+    const cleanEmail = email.trim().toLowerCase();
 
-    res.cookie("civicplus_token", token, cookieOptions).json({
-      success: true,
-      message: "Login successful",
-      user,
-    });
+    const { token, user } = await loginUser(cleanEmail, password);
+
+    return res
+      .cookie("civicplus_token", token, cookieOptions)
+      .status(200)
+      .json({
+        success: true,
+
+        message: "Login successful",
+
+        user: {
+          id: user.id || user._id?.toString(),
+
+          name: user.name,
+
+          email: user.email,
+
+          phone: user.phone,
+
+          role: user.role,
+
+          avatar: user.avatar,
+        },
+      });
   } catch (error) {
     console.error("Login error:", error);
 
-    res.status(401).json({
+    return res.status(401).json({
       success: false,
+
       message: error instanceof Error ? error.message : "Login failed",
     });
   }
@@ -117,7 +183,9 @@ export async function login(req, res) {
 export async function logout(req, res) {
   res.clearCookie("civicplus_token", {
     httpOnly: true,
+
     secure: process.env.NODE_ENV === "production",
+
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
 
@@ -151,7 +219,7 @@ export async function getCurrentUser(req, res) {
       });
     }
 
-    const user = await users().findOne({
+    const user = await usersCollection().findOne({
       _id: new ObjectId(decoded.userId),
     });
 
@@ -164,12 +232,18 @@ export async function getCurrentUser(req, res) {
 
     return res.json({
       success: true,
+
       user: {
         id: user._id.toString(),
+
         name: user.name,
+
         email: user.email,
+
         phone: user.phone,
+
         role: user.role,
+
         avatar: user.avatar,
       },
     });

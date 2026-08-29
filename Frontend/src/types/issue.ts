@@ -1,56 +1,81 @@
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+
 export type IssueCategory =
   | "pothole"
   | "garbage"
   | "streetlight"
-  | "obstruction"
-  | "waterlogging";
-export type IssueStatus =
-  | "REPORTED"
-  | "AI_ANALYZED"
-  | "VERIFIED"
-  | "ASSIGNED"
-  | "IN_PROGRESS"
-  | "RESOLVED"
-  | "RESOLUTION_VERIFIED"
-  | "CLOSED";
-export interface StatusEvent {
-  status: IssueStatus;
-  at: string;
-  note?: string;
-}
-export interface CivicIssue {
-  id: string;
+  | "water_leakage"
+  | "road_damage"
+  | "other";
+
+export interface SubmitIssueInput {
+  file: File;
   category: IssueCategory;
+  latitude: number;
+  longitude: number;
+  address: string;
   description?: string;
-  imageUrl: string;
-  lat: number;
-  lng: number;
-  address?: string;
-  severity: number;
-  confidence: number;
-  priority: number;
-  reportCount: number;
-  uniqueReporterCount?: number;
-  status: IssueStatus;
-  isDuplicate?: boolean;
-  parentIssueId?: string | null;
+  area?: string;
+}
+
+export interface Issue {
+  _id: string;
+  issueId: string;
+
+  issueType: IssueCategory;
+
+  description: string;
+
+  image: {
+    url: string;
+    publicId?: string;
+  };
+
+  location: {
+    latitude: number;
+    longitude: number;
+    address?: string;
+  };
+
+  status:
+    | "reported"
+    | "under_review"
+    | "assigned"
+    | "in_progress"
+    | "resolved"
+    | "rejected";
+
+  priority: "low" | "medium" | "high" | "critical";
+
+  emailStatus: "pending" | "sent" | "failed";
+
+  authority?: {
+    _id: string;
+    name: string;
+    department: string;
+    email: string;
+  };
+
+  reportedBy?: {
+    _id: string;
+    name: string;
+    email: string;
+    phone?: string;
+  };
+
   createdAt: string;
   updatedAt: string;
-  assignedTeam?: string | null;
-  aiSummary?: string;
-  statusHistory?: StatusEvent[];
-  resolution?: {
-    afterImageUrl?: string;
-    verificationScore?: number;
-    citizenConfirmed?: boolean;
-  };
 }
-export interface CivicNotification {
-  id: string;
-  issueId: string;
-  type: "issue_created" | "status_updated";
-  title: string;
-  message: string;
-  read: boolean;
-  createdAt: string;
+
+interface IssueResponse {
+  success: boolean;
+  message?: string;
+  issue: Issue;
+}
+
+interface IssuesResponse {
+  success: boolean;
+  count?: number;
+  issues: Issue[];
 }
