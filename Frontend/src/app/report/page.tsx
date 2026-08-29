@@ -15,25 +15,38 @@ import {
   Camera,
 } from "lucide-react";
 import { Navbar } from "@/components/ui";
-import { submitIssue } from "@/lib/api-client";
+import { issueApi } from "@/lib/api-client";
 
 export default function ReportPage() {
   const [file, setFile] = useState<File | null>(null);
   const [locating, setLocating] = useState(false);
   const [located, setLocated] = useState(false);
+
+  const [location, setLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+
   const [analysis, setAnalysis] = useState(false);
   const [done, setDone] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [note, setNote] = useState("");
+
   const [category, setCategory] = useState<
     "pothole" | "garbage" | "streetlight"
   >("pothole");
 
+  const categoryMap = {
+    pothole: "potholes",
+    garbage: "garbage",
+    streetlight: "streetlights",
+  } as const;
+
   const [imageUrl, setImageUrl] = useState("");
   const [issueId, setIssueId] = useState("CIV-1024");
   const [error, setError] = useState("");
-  // camera
 
+  // camera
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const cameraStreamRef = useRef<MediaStream | null>(null);
@@ -151,49 +164,132 @@ export default function ReportPage() {
 
   const locate = () => {
     setLocating(true);
+    setError("");
+
     if (!navigator.geolocation) {
       setLocating(false);
       setError(
-        "Location is unavailable in this browser. You can place a pin manually.",
+        "Location is unavailable in this browser. Please enable location services.",
       );
       return;
     }
+
     navigator.geolocation.getCurrentPosition(
-      () => {
+      (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        setLocation({
+          latitude,
+          longitude,
+        });
+
         setLocating(false);
         setLocated(true);
       },
-      () => {
+      (locationError) => {
+        console.error("Location error:", locationError);
+
         setLocating(false);
-        setLocated(true);
+        setLocated(false);
+
         setError(
-          "We couldn’t access your location, so a manual demo pin was used. You can still submit the report.",
+          "Unable to access your location. Please allow location permission and try again.",
         );
       },
-      { enableHighAccuracy: true, timeout: 8000 },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      },
     );
   };
 
   const submitReport = async () => {
+    if (!file) {
+      setError("Please add a photo before submitting.");
+      return;
+    }
+
+    if (!located || !location) {
+      setError("Please allow location access before submitting.");
+      return;
+    }
+
     setAnalysis(true);
     setError("");
+
     try {
-      const payload = await submitIssue({
-        file: file!,
-        category,
-        latitude: 28.6139,
-        longitude: 77.209,
-        address: "Outer Ring Road, Sector 15",
-        description: note || undefined,
+      const formData = new FormData();
+
+      /*
+       * IMPORTANT:
+       * Backend expects "issueType",
+       * not "category".
+       */
+      formData.append("issueType", category);
+
+      /*
+       * Description is optional.
+       */
+      formData.append("description", note.trim());
+
+      /*
+       * REAL GPS LOCATION
+       */
+      formData.append("latitude", String(location.latitude));
+
+      formData.append("longitude", String(location.longitude));
+
+      /*
+       * Address can later come from
+       * reverse geocoding.
+       */
+      formData.append("address", "Current reported location");
+
+      /*
+       * Optional area.
+       */
+      formData.append("area", "");
+
+      /*
+       * Image
+       */
+      formData.append("image", file);
+
+      console.log("Submitting issue:", {
+        issueType: category,
+        latitude: location.latitude,
+        longitude: location.longitude,
+        file: file.name,
       });
-      setIssueId(payload.data?.publicId ?? payload.issue.id);
-      setTimeout(() => setDone(true), 700);
+
+      const payload = await issueApi.create(formData);
+
+      console.log("Issue submission response:", payload);
+
+      const returnedIssue = payload?.issue;
+
+      setIssueId(
+        returnedIssue?.issueId ||
+          returnedIssue?.publicId ||
+          returnedIssue?._id ||
+          "CIV-1024",
+      );
+
+      setTimeout(() => {
+        setAnalysis(false);
+        setDone(true);
+      }, 700);
     } catch (submissionError) {
+      console.error("Issue submission error:", submissionError);
+
       setError(
         submissionError instanceof Error
           ? submissionError.message
           : "Your report could not be submitted.",
       );
+
       setAnalysis(false);
     }
   };
@@ -820,7 +916,7 @@ export default function ReportPage() {
                       </p>
 
                       <p className="mt-1 truncate font-mono text-[9px] text-slate-500">
-                        28.613900° N, 77.209000° E
+                        31.254111° N, 75.705603° E
                       </p>
                     </div>
 
