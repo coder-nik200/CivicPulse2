@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { CivicIssue, IssueCategory, IssueStatus } from "@/types/issue";
 import { label } from "@/lib/issue";
+import Image from "next/image";
+
 export const categoryIcon = (category: IssueCategory, size = 16) =>
   category === "pothole" || category === "obstruction" ? (
     <Construction size={size} />
@@ -80,10 +82,11 @@ export function Navbar({ dark = false }: { dark?: boolean }) {
           href="/"
           className="flex items-center gap-2 font-extrabold tracking-tight"
         >
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-civic text-white">
-            <MapPin size={17} />
+          <span className="grid h-20 w-20 place-items-center rounded-lg bg-civic text-white">
+            {/* <MapPin size={17} /> */}
+            <Image src="/Logo.png" alt="Civic Fix" width={500} height={350} />
           </span>
-          CivicPulse
+          {/* CivicPulse */}
         </Link>
         <div className="hidden items-center gap-7 md:flex">
           <Link className={`navlink ${tone}`} href="/">
@@ -99,6 +102,9 @@ export function Navbar({ dark = false }: { dark?: boolean }) {
         <div className="flex items-center gap-4">
           <Link href="/admin" className="hidden text-xs font-bold md:block">
             Admin
+          </Link>
+          <Link href="/dashboard" className="hidden text-xs font-bold md:block">
+            Dashboard
           </Link>
           <Link
             href="/report"
