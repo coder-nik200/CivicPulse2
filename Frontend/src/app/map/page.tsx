@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Filter, MapPin, Search, SlidersHorizontal, X } from "lucide-react";
 import { CivicIssue, IssueCategory } from "@/types/issue";
 import { label } from "@/lib/issue";
+import { Navbar } from "@/components";
 
 const CivicMap = dynamic(() => import("@/components/civic-map"), {
   ssr: false,
@@ -58,9 +59,11 @@ export default function MapPage() {
       setLoading(false);
     }
   }, []);
+
   useEffect(() => {
     loadIssues(bounds);
   }, [bounds, loadIssues]);
+
   useEffect(() => {
     const timeout = window.setTimeout(async () => {
       if (search.trim().length < 3) return setPlaces([]);
@@ -105,13 +108,14 @@ export default function MapPage() {
 
   return (
     <main className="map-product">
+      <Navbar/>
       <header className="map-topbar">
-        <Link href="/" className="map-brand">
+        {/* <Link href="/" className="map-brand">
           <span>
             <MapPin size={17} />
           </span>
           CivicFix
-        </Link>
+        </Link> */}
         <div className="map-search">
           <Search size={18} />
           <input
@@ -262,6 +266,7 @@ export default function MapPage() {
               </div>
             </div>
           )}
+
         </section>
       </div>
     </main>

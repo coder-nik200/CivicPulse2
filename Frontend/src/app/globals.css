@@ -1805,7 +1805,10 @@ select:focus-visible {
     0 1px 2px rgba(15, 23, 42, 0.04);
   height: calc(100vh - 130px);
 }
-
+.map-frame .border {
+  border: none !important;
+  border-radius: 0 !important;
+}
 .map-frame .leaflet-container {
   height: 100%;
   width: 100%;
@@ -1922,7 +1925,9 @@ select:focus-visible {
   backdrop-filter: blur(12px);
   border-bottom: 1px solid #e2e8f0;
 }
-
+.leaflet-popup-pane {
+  display: none;
+}
 .map-search {
   flex: 1;
   display: flex;
@@ -1953,6 +1958,7 @@ select:focus-visible {
 }
 
 .map-status {
+  display: none;
   position: absolute;
   top: 18px;
   width: 93%;
@@ -1970,7 +1976,7 @@ select:focus-visible {
 .selected-sheet {
   position: absolute;
   left: 24px;
-  bottom: 24px;
+  bottom: 74px;
   width: 340px;
   background: #fff;
   border: 1px solid #dbe7df;
