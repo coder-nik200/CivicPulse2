@@ -11,8 +11,8 @@ interface UseCameraReturn {
   stopCamera: () => void;
   capturePhoto: () => string | null;
   clearCapture: () => void;
-  videoRef: React.RefObject<HTMLVideoElement>;
-  canvasRef: React.RefObject<HTMLCanvasElement>;
+  videoRef: React.RefObject<HTMLVideoElement | null>;
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
 }
 
 export function useCamera(

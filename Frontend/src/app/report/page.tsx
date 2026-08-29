@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/ui";
 import { submitIssue } from "@/lib/api-client";
+import { sendEmailJSAlert } from "@/lib/emailjs";
 
 export default function ReportPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -80,6 +81,22 @@ export default function ReportPage() {
         description: note || undefined,
       });
       setIssueId(payload.issue.id);
+      
+      // Dispatch EmailJS alert
+      try {
+        await sendEmailJSAlert({
+          id: payload.issue.id,
+          category,
+          description: note,
+          address: "Outer Ring Road, Sector 15",
+          imageUrl: imageUrl, // base64 representation loaded locally
+          lat: 28.6139,
+          lng: 77.209,
+        });
+      } catch (err) {
+        console.error("Failed to send EmailJS client notification:", err);
+      }
+
       setTimeout(() => setDone(true), 700);
     } catch (submissionError) {
       setError(

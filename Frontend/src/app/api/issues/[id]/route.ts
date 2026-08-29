@@ -6,7 +6,7 @@ export async function GET(
   _: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const issue = issueStore.find((await params).id);
+  const issue = await issueStore.find((await params).id);
   return issue
     ? NextResponse.json({ issue })
     : NextResponse.json({ error: "Issue not found" }, { status: 404 });
@@ -18,7 +18,7 @@ export async function PATCH(
   const parsed = updateStatusSchema.safeParse(await request.json());
   if (!parsed.success)
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
-  const issue = issueStore.updateStatus((await params).id, parsed.data.status);
+  const issue = await issueStore.updateStatus((await params).id, parsed.data.status);
   return issue
     ? NextResponse.json({ issue })
     : NextResponse.json(

@@ -1,4 +1,4 @@
-// File: /Users/nitish/Documents/Codex/2026-08-29/add-frontend-with-backend-and-solve/outputs/ma 3/Frontend/src/app/api/issues/route.ts
+// File: /Users/nitish/Desktop/ma 3/Frontend/src/app/api/issues/route.ts
 import * as entry from '../../../../../src/app/api/issues/route.js'
 import type { NextRequest } from 'next/server.js'
 

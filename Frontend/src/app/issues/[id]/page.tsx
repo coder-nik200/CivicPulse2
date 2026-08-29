@@ -22,7 +22,7 @@ export default async function IssuePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const issue = issueStore.find(id);
+  const issue = await issueStore.find(id);
 
   if (!issue) return notFound();
 

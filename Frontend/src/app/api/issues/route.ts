@@ -10,18 +10,17 @@ export async function GET(request: NextRequest) {
   const minLng = Number(request.nextUrl.searchParams.get("minLng"));
   const maxLng = Number(request.nextUrl.searchParams.get("maxLng"));
   const hasBounds = [minLat, maxLat, minLng, maxLng].every(Number.isFinite);
-  const issues = issueStore
-    .all()
-    .filter(
-      (issue) =>
-        (!category || issue.category === category) &&
-        (!status || issue.status === status) &&
-        (!hasBounds ||
-          (issue.lat >= minLat &&
-            issue.lat <= maxLat &&
-            issue.lng >= minLng &&
-            issue.lng <= maxLng)),
-    );
+  const allIssues = await issueStore.all();
+  const issues = allIssues.filter(
+    (issue) =>
+      (!category || issue.category === category) &&
+      (!status || issue.status === status) &&
+      (!hasBounds ||
+        (issue.lat >= minLat &&
+          issue.lat <= maxLat &&
+          issue.lng >= minLng &&
+          issue.lng <= maxLng)),
+  );
   return NextResponse.json({ issues });
 }
 
@@ -37,8 +36,9 @@ export async function POST(request: NextRequest) {
     );
   const input = parsed.data;
   const now = new Date().toISOString();
-  const sequence = 1040 + issueStore.all().length;
-  const issue = issueStore.create({
+  const allIssues = await issueStore.all();
+  const sequence = 1040 + allIssues.length;
+  const issue = await issueStore.create({
     id: `CIV-${sequence}`,
     ...input,
     severity: 0,

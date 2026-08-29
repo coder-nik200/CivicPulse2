@@ -528,6 +528,9 @@ video {
 .visible{
   visibility: visible;
 }
+.collapse{
+  visibility: collapse;
+}
 .fixed{
   position: fixed;
 }
@@ -930,6 +933,9 @@ video {
 }
 .shrink-0{
   flex-shrink: 0;
+}
+.border-collapse{
+  border-collapse: collapse;
 }
 @keyframes pulse{
 

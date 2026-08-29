@@ -162,7 +162,6 @@ const issueSchema = new mongoose.Schema({
 issueSchema.index({ location: "2dsphere" });
 issueSchema.index({ status: 1, createdAt: -1 });
 issueSchema.index({ category: 1, status: 1 });
-issueSchema.index({ id: 1 });
 
 // Auto-update updatedAt on every save
 issueSchema.pre("findOneAndUpdate", function () {

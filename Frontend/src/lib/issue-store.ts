@@ -1,17 +1,9 @@
 import { demoIssues } from "@/data/demoIssues";
 import { CivicIssue, CivicNotification, IssueStatus } from "@/types/issue";
+import { connectToDatabase } from "./db";
+import nodemailer from "nodemailer";
+import { Db } from "mongodb";
 
-// Replace this module with a database repository (Prisma/Firebase/etc.) in production.
-// Keeping it behind this small interface prevents UI routes from depending on storage.
-const globalStore = globalThis as unknown as {
-  civicIssues?: CivicIssue[];
-  civicNotifications?: CivicNotification[];
-};
-const issues =
-  globalStore.civicIssues ?? demoIssues.map((issue) => ({ ...issue }));
-globalStore.civicIssues = issues;
-const notifications = globalStore.civicNotifications ?? [];
-globalStore.civicNotifications = notifications;
 const transitions: Record<IssueStatus, IssueStatus[]> = {
   REPORTED: ["AI_ANALYZED"],
   AI_ANALYZED: ["VERIFIED"],
@@ -22,72 +14,279 @@ const transitions: Record<IssueStatus, IssueStatus[]> = {
   RESOLUTION_VERIFIED: ["CLOSED"],
   CLOSED: [],
 };
-const addNotification = (
+
+async function seedIfNeeded(db: Db) {
+  const count = await db.collection("issues").countDocuments();
+  if (count === 0) {
+    const formattedDemoIssues = demoIssues.map((issue) => ({
+      ...issue,
+      location: { type: "Point", coordinates: [issue.lng, issue.lat] },
+      statusHistory: issue.statusHistory || [
+        { status: issue.status, at: issue.createdAt, note: "Initial demo status" },
+      ],
+    }));
+    await db.collection("issues").insertMany(formattedDemoIssues);
+    console.log("✓ Seeded demo issues into MongoDB successfully");
+  }
+}
+
+// Nodemailer Helper to send email alerts to authorities and administrator
+async function sendIssueEmail(issue: CivicIssue) {
+  const recipients = ["codesnippet17@gmail.com", "ajajkhan2842@gmail.com"];
+  const emailUser = process.env.EMAIL_USER;
+  const emailPass = process.env.EMAIL_PASS;
+
+  const mailOptions: nodemailer.SendMailOptions = {
+    from: `"CivicPulse Alerts" <${emailUser || "noreply@civicpulse.org"}>`,
+    to: recipients.join(", "),
+    subject: `[CivicPulse Alert] New ${issue.category.toUpperCase()} Reported: ${issue.id}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <div style="background-color: #0f766e; color: white; padding: 20px; text-align: center;">
+          <h1 style="margin: 0; font-size: 24px;">CivicPulse Incident Report</h1>
+          <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;">Authority & Admin Alert Notification</p>
+        </div>
+        <div style="padding: 20px;">
+          <h2 style="color: #0f766e; border-bottom: 2px solid #f0fdfa; padding-bottom: 8px; margin-top: 0;">Issue Details</h2>
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; width: 130px; color: #666;">Issue ID:</td>
+              <td style="padding: 8px 0; font-family: monospace; font-weight: bold; color: #0f766e;">${issue.id}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #666;">Category:</td>
+              <td style="padding: 8px 0; text-transform: capitalize;">${issue.category.replaceAll("_", " ")}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #666;">Description:</td>
+              <td style="padding: 8px 0;">${issue.description || "No description provided."}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #666;">Location Address:</td>
+              <td style="padding: 8px 0;">${issue.address || "Unknown Address"}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #666;">Coordinates:</td>
+              <td style="padding: 8px 0; font-family: monospace;">${issue.lat.toFixed(6)}°, ${issue.lng.toFixed(6)}°</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #666;">AI Severity:</td>
+              <td style="padding: 8px 0;"><span style="background-color: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-weight: bold;">${issue.severity}/10</span></td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #666;">Priority Score:</td>
+              <td style="padding: 8px 0;"><span style="background-color: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 4px; font-weight: bold;">${issue.priority}/100</span></td>
+            </tr>
+          </table>
+          
+          <div style="text-align: center; margin: 25px 0;">
+            <p style="font-weight: bold; margin-bottom: 10px; color: #666;">Reported Photo Evidence:</p>
+            <img src="${issue.imageUrl.startsWith("data:") ? "cid:issueimage" : issue.imageUrl}" style="max-width: 100%; max-height: 400px; border-radius: 8px; border: 1px solid #eee;" alt="Issue Photo"/>
+          </div>
+        </div>
+        <div style="background-color: #f9fafb; padding: 15px; text-align: center; border-top: 1px solid #eee; font-size: 12px; color: #666;">
+          This is an automated alert generated by CivicPulse. Please investigate the reported issue at the location listed above.
+        </div>
+      </div>
+    `,
+  };
+
+  // Attach base64 image if applicable
+  if (issue.imageUrl.startsWith("data:")) {
+    const match = issue.imageUrl.match(/^data:(image\/\w+);base64,(.+)$/);
+    if (match) {
+      const contentType = match[1];
+      const base64Data = match[2];
+      const filename = `issue_${issue.id}.${contentType.split("/")[1] || "jpg"}`;
+      mailOptions.attachments = [{
+        filename,
+        content: Buffer.from(base64Data, "base64"),
+        cid: "issueimage",
+      }];
+    }
+  }
+
+  if (emailUser && emailPass) {
+    try {
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: emailUser,
+          pass: emailPass,
+        },
+      });
+      await transporter.sendMail(mailOptions);
+      console.log(`✓ Email notification sent successfully to codesnippet17@gmail.com and ajajkhan2842@gmail.com for issue ${issue.id}`);
+    } catch (err) {
+      console.error("✗ Failed to send email alert in frontend:", err);
+    }
+  } else {
+    console.log("ℹ EMAIL_USER and EMAIL_PASS not configured in frontend. Creating automatic Ethereal test email account...");
+    try {
+      const testAccount = await nodemailer.createTestAccount();
+      const transporter = nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 587,
+        secure: false,
+        auth: {
+          user: testAccount.user,
+          pass: testAccount.pass,
+        },
+      });
+      mailOptions.from = `"CivicPulse Alerts" <${testAccount.user}>`;
+      const info = await transporter.sendMail(mailOptions);
+      const viewUrl = nodemailer.getTestMessageUrl(info);
+      console.log(`\n=============================================================`);
+      console.log(`✓ [TEST EMAIL SENT] Issue ID: ${issue.id}`);
+      console.log(`👉 View formatted email content at: ${viewUrl}`);
+      console.log(`=============================================================\n`);
+    } catch (err) {
+      console.error("✗ Failed to send test email to Ethereal:", err);
+    }
+  }
+}
+
+async function addNotification(
   issue: CivicIssue,
   type: CivicNotification["type"],
   title: string,
   message: string,
-) =>
-  notifications.unshift({
-    id: `NOT-${Date.now()}-${notifications.length}`,
+) {
+  const { db } = await connectToDatabase();
+  const notification: CivicNotification = {
+    id: `NOT-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
     issueId: issue.id,
     type,
     title,
     message,
     read: false,
     createdAt: new Date().toISOString(),
-  });
+  };
+  await db.collection("notifications").insertOne(notification);
+}
 
 export const issueStore = {
-  all: () => issues,
-  find: (id: string) => issues.find((issue) => issue.id === id),
-  create: (issue: CivicIssue) => {
+  all: async (): Promise<CivicIssue[]> => {
+    const { db } = await connectToDatabase();
+    await seedIfNeeded(db);
+    return await db
+      .collection<CivicIssue>("issues")
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+  },
+
+  find: async (id: string): Promise<CivicIssue | null> => {
+    const { db } = await connectToDatabase();
+    await seedIfNeeded(db);
+    return await db.collection<CivicIssue>("issues").findOne({ id });
+  },
+
+  create: async (issue: CivicIssue): Promise<CivicIssue> => {
+    const { db } = await connectToDatabase();
+    await seedIfNeeded(db);
     issue.statusHistory = [
       { status: issue.status, at: issue.createdAt, note: "Report submitted" },
     ];
-    issues.unshift(issue);
-    addNotification(
+    // Store geoJSON location for spatial queries if needed
+    (issue as any).location = { type: "Point", coordinates: [issue.lng, issue.lat] };
+    await db.collection("issues").insertOne(issue);
+
+    await addNotification(
       issue,
       "issue_created",
       "New civic issue reported",
       `${issue.category} reported near ${issue.address || "your selected location"}.`,
     );
+
+    // Trigger email alert
+    await sendIssueEmail(issue);
+
     return issue;
   },
-  updateStatus: (id: string, status: IssueStatus) => {
-    const issue = issues.find((entry) => entry.id === id);
+
+  updateStatus: async (
+    id: string,
+    status: IssueStatus,
+  ): Promise<CivicIssue | undefined> => {
+    const { db } = await connectToDatabase();
+    await seedIfNeeded(db);
+    const issue = await db.collection<CivicIssue>("issues").findOne({ id });
     if (!issue || !transitions[issue.status].includes(status)) return undefined;
-    issue.status = status;
-    issue.updatedAt = new Date().toISOString();
-    issue.statusHistory = [
+
+    const updatedAt = new Date().toISOString();
+    const updatedHistory = [
       ...(issue.statusHistory || [{ status: "REPORTED", at: issue.createdAt }]),
-      { status, at: issue.updatedAt },
+      { status, at: updatedAt },
     ];
-    addNotification(
-      issue,
+
+    await db.collection("issues").updateOne(
+      { id },
+      {
+        $set: {
+          status,
+          updatedAt,
+          statusHistory: updatedHistory,
+        },
+      },
+    );
+
+    const updatedIssue = {
+      ...issue,
+      status,
+      updatedAt,
+      statusHistory: updatedHistory,
+    };
+
+    await addNotification(
+      updatedIssue,
       "status_updated",
       "Issue status updated",
-      `${issue.category} at ${issue.address || "the reported location"} is now ${status.replaceAll("_", " ")}.`,
+      `${issue.category} at ${
+        issue.address || "the reported location"
+      } is now ${status.replaceAll("_", " ")}.`,
     );
-    return issue;
+
+    return updatedIssue;
   },
-  notifications: () => notifications,
-  markNotificationRead: (id: string) => {
-    const notification = notifications.find((item) => item.id === id);
-    if (notification) notification.read = true;
-    return notification;
+
+  notifications: async (): Promise<CivicNotification[]> => {
+    const { db } = await connectToDatabase();
+    return await db
+      .collection<CivicNotification>("notifications")
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
   },
-  dashboard: () => ({
-    total: issues.length,
-    reported: issues.filter((issue) =>
-      ["REPORTED", "AI_ANALYZED", "VERIFIED", "ASSIGNED"].includes(
-        issue.status,
-      ),
-    ).length,
-    inProgress: issues.filter((issue) => issue.status === "IN_PROGRESS").length,
-    resolved: issues.filter((issue) =>
-      ["RESOLVED", "RESOLUTION_VERIFIED", "CLOSED"].includes(issue.status),
-    ).length,
-    critical: issues.filter((issue) => issue.severity >= 8).length,
-  }),
+
+  markNotificationRead: async (
+    id: string,
+  ): Promise<CivicNotification | null> => {
+    const { db } = await connectToDatabase();
+    await db
+      .collection("notifications")
+      .updateOne({ id }, { $set: { read: true } });
+    return await db
+      .collection<CivicNotification>("notifications")
+      .findOne({ id });
+  },
+
+  dashboard: async () => {
+    const { db } = await connectToDatabase();
+    await seedIfNeeded(db);
+    const issues = await db.collection<CivicIssue>("issues").find({}).toArray();
+    return {
+      total: issues.length,
+      reported: issues.filter((issue) =>
+        ["REPORTED", "AI_ANALYZED", "VERIFIED", "ASSIGNED"].includes(
+          issue.status,
+        ),
+      ).length,
+      inProgress: issues.filter((issue) => issue.status === "IN_PROGRESS").length,
+      resolved: issues.filter((issue) =>
+        ["RESOLVED", "RESOLUTION_VERIFIED", "CLOSED"].includes(issue.status),
+      ).length,
+      critical: issues.filter((issue) => issue.severity >= 8).length,
+    };
+  },
 };

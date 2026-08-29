@@ -577,6 +577,11 @@ negotiator@0.6.3:
   resolved "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
 
+nodemailer@^9.0.6:
+  version "9.0.6"
+  resolved "https://registry.npmjs.org/nodemailer/-/nodemailer-9.0.6.tgz"
+  integrity sha512-IQUGFdhdGwI9+AWX+FpUt4DLmvFaOjTMEoneTIWX/RXxuy1TdenPwWrvFMSfLkPKl+HQEXWuSAxEMMbPYXtBmg==
+
 nodemon@^3.1.4:
   version "3.1.14"
   resolved "https://registry.npmjs.org/nodemon/-/nodemon-3.1.14.tgz"

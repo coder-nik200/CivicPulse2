@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
 let client;
 export let db;
@@ -10,6 +11,9 @@ export async function connectDB() {
     throw new Error("MONGODB_URI is not defined in .env");
   }
 
+  // Connect Mongoose
+  await mongoose.connect(uri, { dbName: "civicpulse" });
+
   client = new MongoClient(uri);
 
   await client.connect();
@@ -18,5 +22,5 @@ export async function connectDB() {
 
   await db.command({ ping: 1 });
 
-  console.log("✓ MongoDB connected successfully");
+  console.log("✓ MongoDB and Mongoose connected successfully");
 }
