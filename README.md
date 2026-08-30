@@ -1,4 +1,4 @@
-🏙️ CivicFix
+# 🏙️ CivicFix
 
 Smart Civic Issue Reporting & Community Management Platform
 
